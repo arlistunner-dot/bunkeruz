@@ -1,0 +1,22 @@
+{
+  "name": "songgi-joy-backend",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "nodemon src/server.js",
+    "start": "node src/server.js",
+    "bot": "node src/bot.js",
+    "dev:bot": "nodemon src/bot.js"
+  },
+  "dependencies": {
+    "cors": "latest",
+    "dotenv": "latest",
+    "express": "latest",
+    "socket.io": "latest",
+    "telegraf": "latest"
+  },
+  "devDependencies": {
+    "nodemon": "latest"
+  }
+}

@@ -1,0 +1,1207 @@
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  font-family: Arial, sans-serif;
+  background:
+    radial-gradient(circle at top left, rgba(255, 59, 59, 0.18), transparent 30%),
+    radial-gradient(circle at top right, rgba(90, 130, 255, 0.12), transparent 28%),
+    linear-gradient(135deg, #07080c, #151720 55%, #07080c);
+  color: #ffffff;
+}
+
+button,
+input {
+  font: inherit;
+}
+
+button {
+  border: 0;
+  cursor: pointer;
+  font-weight: 700;
+}
+
+button:disabled {
+  cursor: not-allowed;
+  opacity: 0.45;
+}
+
+.app-shell {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+}
+
+.hero-card,
+.lobby-layout,
+.game-layout {
+  width: min(920px, 100%);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 28px;
+  background: rgba(12, 14, 20, 0.88);
+  box-shadow: 0 24px 80px rgba(0, 0, 0, 0.45);
+}
+
+.hero-card {
+  padding: 34px;
+}
+
+.badge {
+  display: inline-flex;
+  padding: 8px 12px;
+  border-radius: 999px;
+  background: rgba(255, 59, 59, 0.13);
+  color: #ff7676;
+  font-size: 14px;
+  margin-bottom: 18px;
+}
+
+h1 {
+  margin: 0;
+  font-size: clamp(42px, 8vw, 86px);
+  line-height: 0.95;
+  letter-spacing: -3px;
+}
+
+.subtitle {
+  max-width: 720px;
+  margin: 20px 0 26px;
+  color: rgba(255, 255, 255, 0.76);
+  font-size: 18px;
+  line-height: 1.6;
+}
+
+.status-grid,
+.form-grid,
+.scenario-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px;
+  margin: 26px 0;
+}
+
+.status-box,
+.room-code-card,
+.player-row,
+.error-box,
+.scenario-card,
+.round-card,
+.reveal-card,
+.mini-info,
+.my-card-panel,
+.card-choice,
+.info-box {
+  border-radius: 18px;
+  background: rgba(255, 255, 255, 0.07);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.status-box {
+  padding: 18px;
+}
+
+.status-box span,
+.room-code-card span,
+.panel-header span,
+.player-row span,
+.scenario-card span,
+.round-card span,
+.mini-info span,
+.fact-row span,
+.card-choice span,
+.section-title span,
+.player-progress span {
+  display: block;
+  color: rgba(255, 255, 255, 0.56);
+  font-size: 13px;
+  margin-bottom: 7px;
+}
+
+.status-box strong,
+.panel-header strong {
+  color: #b7ffbf;
+}
+
+.form-grid label {
+  display: grid;
+  gap: 8px;
+  color: rgba(255, 255, 255, 0.74);
+  font-size: 14px;
+}
+
+.form-grid input {
+  width: 100%;
+  padding: 15px 16px;
+  border-radius: 16px;
+  outline: none;
+  color: #ffffff;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+.form-grid input:focus {
+  border-color: rgba(255, 59, 59, 0.6);
+}
+
+.error-box {
+  padding: 14px 16px;
+  margin: 16px 0;
+  color: #ffb7b7;
+  background: rgba(255, 59, 59, 0.12);
+}
+
+.actions,
+.lobby-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 20px;
+}
+
+.actions button,
+.lobby-actions button,
+.room-code-card button,
+.round-card button,
+.small-secondary,
+.card-choice button {
+  padding: 15px 22px;
+  border-radius: 16px;
+  background: #ff3b3b;
+  color: #ffffff;
+  font-size: 16px;
+}
+
+.actions button.secondary,
+.lobby-actions button.secondary,
+.small-secondary {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.lobby-actions button.disabled {
+  background: rgba(255, 255, 255, 0.12);
+}
+
+.note {
+  margin: 22px 0 0;
+  color: rgba(255, 255, 255, 0.5);
+  font-size: 14px;
+}
+
+.lobby-layout,
+.game-layout {
+  display: grid;
+  grid-template-columns: 1.3fr 0.8fr;
+  overflow: hidden;
+}
+
+.lobby-main,
+.game-main {
+  padding: 34px;
+}
+
+.players-panel {
+  padding: 24px;
+  background: rgba(255, 255, 255, 0.04);
+  border-left: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.panel-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 16px;
+}
+
+.room-code-card {
+  padding: 18px;
+  max-width: 360px;
+}
+
+.room-code-card strong {
+  display: block;
+  margin: 2px 0 14px;
+  font-size: 46px;
+  letter-spacing: 8px;
+}
+
+.room-code-card button {
+  width: 100%;
+  font-size: 14px;
+  padding: 12px 16px;
+}
+
+.players-list {
+  display: grid;
+  gap: 10px;
+}
+
+.player-row {
+  display: grid;
+  grid-template-columns: 42px 1fr 12px;
+  align-items: center;
+  gap: 12px;
+  padding: 12px;
+}
+
+.player-row strong {
+  display: block;
+  margin-bottom: 4px;
+}
+
+.avatar {
+  display: grid;
+  place-items: center;
+  width: 42px;
+  height: 42px;
+  border-radius: 14px;
+  background: rgba(255, 59, 59, 0.18);
+  color: #ffb7b7;
+  font-weight: 800;
+}
+
+.ready-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.25);
+}
+
+.ready-dot.active {
+  background: #8cff9d;
+  box-shadow: 0 0 18px rgba(140, 255, 157, 0.7);
+}
+
+.game-shell {
+  align-items: flex-start;
+}
+
+.game-layout {
+  width: min(1240px, 100%);
+}
+
+.top-line {
+  display: flex;
+  justify-content: space-between;
+  gap: 20px;
+  align-items: flex-start;
+}
+
+.small-secondary {
+  padding: 11px 16px;
+  font-size: 14px;
+}
+
+.scenario-card,
+.round-card,
+.reveal-card,
+.mini-info,
+.my-card-panel {
+  padding: 18px;
+}
+
+.scenario-card p,
+.round-card p {
+  margin: 0;
+  line-height: 1.55;
+  color: rgba(255, 255, 255, 0.78);
+}
+
+.scenario-card.danger {
+  background: rgba(255, 59, 59, 0.12);
+  border-color: rgba(255, 59, 59, 0.24);
+}
+
+.round-card {
+  margin: 18px 0;
+}
+
+.round-card strong {
+  display: block;
+  margin-bottom: 8px;
+  font-size: 24px;
+}
+
+.round-card button {
+  margin-top: 16px;
+}
+
+.info-box {
+  padding: 12px 14px;
+  margin-top: 12px;
+  color: rgba(255, 255, 255, 0.76);
+}
+
+.info-box.success {
+  color: #b7ffbf;
+  background: rgba(140, 255, 157, 0.1);
+  border-color: rgba(140, 255, 157, 0.18);
+}
+
+.info-box.vote {
+  color: #ffe7a3;
+  background: rgba(255, 210, 80, 0.1);
+  border-color: rgba(255, 210, 80, 0.18);
+}
+
+.section-title {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 14px;
+}
+
+.section-title strong {
+  display: block;
+  font-size: 22px;
+}
+
+.section-title em {
+  color: rgba(255, 255, 255, 0.5);
+  font-style: normal;
+  font-size: 14px;
+}
+
+.my-card-panel {
+  margin: 18px 0;
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.card-choice-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.card-choice {
+  padding: 14px;
+  background: rgba(0, 0, 0, 0.22);
+}
+
+.card-choice strong {
+  display: block;
+  min-height: 40px;
+  line-height: 1.35;
+  margin-bottom: 12px;
+}
+
+.card-choice button {
+  width: 100%;
+  padding: 11px 12px;
+  font-size: 14px;
+}
+
+.card-choice.revealed {
+  border-color: rgba(140, 255, 157, 0.28);
+  background: rgba(140, 255, 157, 0.08);
+}
+
+.public-title {
+  margin-top: 22px;
+}
+
+.revealed-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px;
+}
+
+.reveal-card {
+  min-height: 160px;
+}
+
+.reveal-head {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 14px;
+}
+
+.reveal-head span {
+  color: #ffb7b7;
+  font-size: 13px;
+}
+
+.player-progress {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 10px 12px;
+  border-radius: 13px;
+  margin-bottom: 12px;
+  background: rgba(0, 0, 0, 0.18);
+}
+
+.player-progress strong {
+  color: rgba(255, 255, 255, 0.72);
+  font-size: 13px;
+}
+
+.empty-card {
+  color: rgba(255, 255, 255, 0.48);
+  margin: 0;
+}
+
+.facts-list {
+  display: grid;
+  gap: 10px;
+}
+
+.fact-row {
+  padding: 10px 12px;
+  border-radius: 13px;
+  background: rgba(0, 0, 0, 0.22);
+}
+
+.fact-row strong {
+  display: block;
+  line-height: 1.35;
+}
+
+.game-panel .panel-header {
+  padding-bottom: 12px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.mini-info {
+  margin-bottom: 14px;
+}
+
+@media (max-width: 960px) {
+  .lobby-layout,
+  .game-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .players-panel {
+    border-left: 0;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+  }
+
+  .revealed-grid,
+  .scenario-grid,
+  .card-choice-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 640px) {
+  .hero-card,
+  .lobby-main,
+  .game-main,
+  .players-panel {
+    padding: 24px;
+  }
+
+  .hero-card,
+  .lobby-layout,
+  .game-layout {
+    border-radius: 22px;
+  }
+
+  .status-grid,
+  .form-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .actions button,
+  .lobby-actions button {
+    width: 100%;
+  }
+
+  .top-line,
+  .section-title {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}
+.full-slots {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.opened-slot {
+  background: rgba(140, 255, 157, 0.09);
+  border: 1px solid rgba(140, 255, 157, 0.18);
+}
+
+.opened-slot strong {
+  color: #d8ffdd;
+}
+
+.closed-slot {
+  background: rgba(255, 255, 255, 0.045);
+  border: 1px solid rgba(255, 255, 255, 0.07);
+}
+
+.closed-slot strong {
+  color: rgba(255, 255, 255, 0.38);
+}
+
+@media (max-width: 640px) {
+  .full-slots {
+    grid-template-columns: 1fr;
+  }
+}
+/* =========================
+   Telegram Mini App UX fix
+   ========================= */
+
+.game-main {
+  max-height: calc(100vh - 48px);
+  overflow-y: auto;
+  scrollbar-width: thin;
+}
+
+.players-panel {
+  max-height: calc(100vh - 48px);
+  overflow-y: auto;
+}
+
+.round-card {
+  position: sticky;
+  top: 0;
+  z-index: 5;
+  backdrop-filter: blur(14px);
+  background: rgba(20, 22, 31, 0.94);
+}
+
+.card-choice-grid,
+.revealed-grid {
+  align-items: stretch;
+}
+
+.card-choice,
+.reveal-card {
+  transition: transform 0.15s ease, border-color 0.15s ease;
+}
+
+.card-choice:active,
+.reveal-card:active {
+  transform: scale(0.99);
+}
+
+.fact-row {
+  min-height: 54px;
+}
+
+.fact-row span {
+  margin-bottom: 4px;
+}
+
+.fact-row strong {
+  font-size: 13px;
+}
+
+@media (max-width: 720px) {
+  body {
+    background:
+      radial-gradient(circle at top, rgba(255, 59, 59, 0.16), transparent 28%),
+      linear-gradient(180deg, #08090f, #11131b);
+  }
+
+  .app-shell {
+    padding: 0;
+    align-items: stretch;
+  }
+
+  .hero-card,
+  .lobby-layout,
+  .game-layout {
+    width: 100%;
+    min-height: 100vh;
+    border-radius: 0;
+    border-left: 0;
+    border-right: 0;
+  }
+
+  .game-layout {
+    display: block;
+  }
+
+  .game-main {
+    max-height: none;
+    overflow: visible;
+    padding: 16px;
+    padding-bottom: 92px;
+  }
+
+  .players-panel {
+    display: none;
+  }
+
+  .top-line {
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    margin: -16px -16px 12px;
+    padding: 14px 16px 10px;
+    background: rgba(8, 9, 15, 0.94);
+    backdrop-filter: blur(16px);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  }
+
+  .top-line h1 {
+    font-size: 32px;
+    letter-spacing: -1.5px;
+  }
+
+  .top-line .badge {
+    margin-bottom: 8px;
+    font-size: 12px;
+    padding: 6px 10px;
+  }
+
+  .small-secondary {
+    padding: 9px 12px;
+    border-radius: 12px;
+    font-size: 13px;
+  }
+
+  .scenario-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    margin: 12px 0;
+    gap: 8px;
+  }
+
+  .scenario-card {
+    padding: 12px;
+    border-radius: 14px;
+  }
+
+  .scenario-card p {
+    font-size: 13px;
+    line-height: 1.45;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  .round-card {
+    margin: 10px 0 12px;
+    padding: 14px;
+    border-radius: 16px;
+  }
+
+  .round-card strong {
+    font-size: 18px;
+  }
+
+  .round-card p {
+    font-size: 13px;
+  }
+
+  .round-card button {
+    width: 100%;
+    padding: 12px 14px;
+    border-radius: 13px;
+    font-size: 14px;
+  }
+
+  .section-title {
+    margin-bottom: 10px;
+  }
+
+  .section-title strong {
+    font-size: 18px;
+  }
+
+  .section-title em {
+    font-size: 12px;
+  }
+
+  .my-card-panel,
+  .vote-panel,
+  .history-panel {
+    padding: 12px;
+    border-radius: 16px;
+    margin: 12px 0;
+  }
+
+  .card-choice-grid {
+    display: flex;
+    gap: 10px;
+    overflow-x: auto;
+    padding-bottom: 6px;
+    scroll-snap-type: x mandatory;
+  }
+
+  .card-choice {
+    min-width: 210px;
+    scroll-snap-align: start;
+    padding: 12px;
+    border-radius: 15px;
+  }
+
+  .card-choice strong {
+    min-height: 38px;
+    font-size: 13px;
+  }
+
+  .card-choice button {
+    padding: 10px;
+    border-radius: 12px;
+    font-size: 12px;
+  }
+
+  .public-title {
+    margin-top: 16px;
+  }
+
+  .revealed-grid {
+    display: flex;
+    gap: 12px;
+    overflow-x: auto;
+    padding-bottom: 10px;
+    scroll-snap-type: x mandatory;
+  }
+
+  .reveal-card {
+    min-width: 285px;
+    max-width: 285px;
+    scroll-snap-align: start;
+    padding: 12px;
+    border-radius: 16px;
+  }
+
+  .reveal-head {
+    margin-bottom: 10px;
+  }
+
+  .player-progress {
+    padding: 8px 10px;
+    margin-bottom: 10px;
+  }
+
+  .full-slots {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 7px;
+  }
+
+  .fact-row {
+    min-height: 48px;
+    padding: 8px;
+    border-radius: 11px;
+  }
+
+  .fact-row span {
+    font-size: 11px;
+    margin-bottom: 3px;
+  }
+
+  .fact-row strong {
+    font-size: 12px;
+    line-height: 1.25;
+  }
+
+  .vote-options {
+    grid-template-columns: 1fr;
+  }
+
+  .vote-button {
+    padding: 13px;
+    border-radius: 14px;
+  }
+
+  .history-row {
+    grid-template-columns: 1fr;
+    gap: 4px;
+  }
+
+  .winner-row {
+    padding: 10px 12px;
+    border-radius: 12px;
+  }
+}
+
+@media (max-width: 390px) {
+  .reveal-card {
+    min-width: 260px;
+    max-width: 260px;
+  }
+
+  .card-choice {
+    min-width: 190px;
+  }
+
+  .fact-row strong {
+    font-size: 11px;
+  }
+}
+/* =========================
+   Final Mini App layout fix
+   ========================= */
+
+html,
+body,
+#root {
+  width: 100%;
+  max-width: 100%;
+  overflow-x: hidden;
+}
+
+.mobile-tabbar {
+  display: none;
+}
+
+.game-tab-section {
+  display: block;
+}
+
+.empty-vote-panel {
+  color: rgba(255, 255, 255, 0.7);
+}
+
+@media (max-width: 720px) {
+  html,
+  body,
+  #root {
+    overflow-x: hidden !important;
+  }
+
+  body {
+    min-width: 0 !important;
+  }
+
+  .app-shell {
+    width: 100vw !important;
+    max-width: 100vw !important;
+    padding: 0 !important;
+    overflow-x: hidden !important;
+  }
+
+  .game-shell {
+    display: block !important;
+  }
+
+  .game-layout {
+    display: block !important;
+    width: 100vw !important;
+    max-width: 100vw !important;
+    min-height: 100vh;
+    border-radius: 0 !important;
+    border-left: 0 !important;
+    border-right: 0 !important;
+    overflow-x: hidden !important;
+  }
+
+  .game-main {
+    width: 100% !important;
+    max-width: 100vw !important;
+    padding: 12px !important;
+    padding-bottom: 86px !important;
+    overflow-x: hidden !important;
+  }
+
+  .players-panel {
+    display: none !important;
+  }
+
+  .top-line {
+    position: sticky;
+    top: 0;
+    z-index: 20;
+    margin: -12px -12px 10px !important;
+    padding: 12px !important;
+    background: rgba(8, 9, 15, 0.96);
+    backdrop-filter: blur(16px);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  }
+
+  .top-line h1 {
+    font-size: 30px !important;
+    letter-spacing: -1px !important;
+  }
+
+  .top-line .badge {
+    margin-bottom: 7px !important;
+    font-size: 11px !important;
+    padding: 6px 9px !important;
+  }
+
+  .small-secondary {
+    padding: 8px 11px !important;
+    border-radius: 11px !important;
+    font-size: 12px !important;
+  }
+
+  .scenario-grid {
+    display: grid !important;
+    grid-template-columns: 1fr 1fr !important;
+    gap: 8px !important;
+    margin: 10px 0 !important;
+    width: 100% !important;
+  }
+
+  .scenario-card {
+    padding: 10px !important;
+    border-radius: 13px !important;
+    min-width: 0 !important;
+  }
+
+  .scenario-card span {
+    font-size: 10px !important;
+    margin-bottom: 4px !important;
+  }
+
+  .scenario-card p {
+    font-size: 11px !important;
+    line-height: 1.35 !important;
+    display: -webkit-box !important;
+    -webkit-line-clamp: 4 !important;
+    -webkit-box-orient: vertical !important;
+    overflow: hidden !important;
+  }
+
+  .round-card {
+    position: relative !important;
+    top: auto !important;
+    margin: 10px 0 !important;
+    padding: 12px !important;
+    border-radius: 15px !important;
+  }
+
+  .round-card strong {
+    font-size: 17px !important;
+    margin-bottom: 5px !important;
+  }
+
+  .round-card p {
+    font-size: 12px !important;
+    line-height: 1.4 !important;
+  }
+
+  .round-card button {
+    width: 100% !important;
+    padding: 11px 12px !important;
+    border-radius: 12px !important;
+    font-size: 13px !important;
+  }
+
+  .info-box {
+    padding: 10px !important;
+    border-radius: 12px !important;
+    font-size: 12px !important;
+  }
+
+  .mobile-tabbar {
+    position: fixed;
+    left: 10px;
+    right: 10px;
+    bottom: 10px;
+    z-index: 80;
+    display: grid !important;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 7px;
+    padding: 7px;
+    border-radius: 18px;
+    background: rgba(12, 14, 20, 0.94);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.55);
+    backdrop-filter: blur(18px);
+  }
+
+  .mobile-tabbar button {
+    padding: 11px 6px;
+    border-radius: 13px;
+    color: rgba(255, 255, 255, 0.7);
+    background: rgba(255, 255, 255, 0.07);
+    font-size: 12px;
+    font-weight: 800;
+  }
+
+  .mobile-tabbar button.active {
+    color: #ffffff;
+    background: #ff3b3b;
+  }
+
+  .game-tab-section {
+    display: none !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    overflow-x: hidden !important;
+  }
+
+  .game-tab-section.mobile-active {
+    display: block !important;
+  }
+
+  .my-card-panel,
+  .vote-panel,
+  .history-panel {
+    width: 100% !important;
+    max-width: 100% !important;
+    margin: 10px 0 !important;
+    padding: 12px !important;
+    border-radius: 15px !important;
+    overflow-x: hidden !important;
+  }
+
+  .section-title {
+    display: flex !important;
+    flex-direction: row !important;
+    align-items: flex-end !important;
+    justify-content: space-between !important;
+    gap: 10px !important;
+    margin-bottom: 10px !important;
+  }
+
+  .section-title strong {
+    font-size: 17px !important;
+  }
+
+  .section-title span,
+  .section-title em {
+    font-size: 11px !important;
+  }
+
+  .card-choice-grid {
+    display: grid !important;
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    gap: 8px !important;
+    overflow: visible !important;
+    padding: 0 !important;
+    width: 100% !important;
+  }
+
+  .card-choice {
+    min-width: 0 !important;
+    max-width: none !important;
+    width: 100% !important;
+    padding: 10px !important;
+    border-radius: 13px !important;
+  }
+
+  .card-choice span {
+    font-size: 10px !important;
+    margin-bottom: 4px !important;
+  }
+
+  .card-choice strong {
+    min-height: 38px !important;
+    font-size: 12px !important;
+    line-height: 1.25 !important;
+    margin-bottom: 8px !important;
+  }
+
+  .card-choice button {
+    width: 100% !important;
+    padding: 9px 6px !important;
+    border-radius: 10px !important;
+    font-size: 10px !important;
+  }
+
+  .players-tab-section {
+    width: 100% !important;
+    max-width: 100% !important;
+  }
+
+  .public-title {
+    margin-top: 10px !important;
+  }
+
+  .revealed-grid {
+    display: grid !important;
+    grid-template-columns: 1fr !important;
+    gap: 10px !important;
+    overflow: visible !important;
+    padding: 0 !important;
+    width: 100% !important;
+  }
+
+  .reveal-card {
+    min-width: 0 !important;
+    max-width: none !important;
+    width: 100% !important;
+    min-height: auto !important;
+    padding: 12px !important;
+    border-radius: 15px !important;
+  }
+
+  .reveal-head {
+    margin-bottom: 8px !important;
+  }
+
+  .reveal-head strong {
+    font-size: 14px !important;
+  }
+
+  .reveal-head span {
+    font-size: 11px !important;
+  }
+
+  .player-progress {
+    padding: 8px !important;
+    margin-bottom: 8px !important;
+    border-radius: 11px !important;
+  }
+
+  .player-progress span,
+  .player-progress strong {
+    font-size: 10px !important;
+  }
+
+  .full-slots {
+    display: grid !important;
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    gap: 7px !important;
+    width: 100% !important;
+  }
+
+  .fact-row {
+    min-height: 44px !important;
+    padding: 8px !important;
+    border-radius: 10px !important;
+  }
+
+  .fact-row span {
+    font-size: 10px !important;
+    margin-bottom: 3px !important;
+  }
+
+  .fact-row strong {
+    font-size: 11px !important;
+    line-height: 1.2 !important;
+  }
+
+  .vote-options {
+    display: grid !important;
+    grid-template-columns: 1fr !important;
+    gap: 8px !important;
+  }
+
+  .vote-button {
+    width: 100% !important;
+    padding: 12px !important;
+    border-radius: 13px !important;
+  }
+
+  .candidate-list {
+    padding: 10px !important;
+    border-radius: 12px !important;
+  }
+
+  .history-row {
+    grid-template-columns: 1fr !important;
+    gap: 4px !important;
+    padding: 10px !important;
+  }
+}
+
+@media (max-width: 380px) {
+  .card-choice-grid,
+  .full-slots {
+    grid-template-columns: 1fr !important;
+  }
+
+  .scenario-grid {
+    grid-template-columns: 1fr !important;
+  }
+}
