@@ -1,2 +1,2 @@
-require("./server");
-require("./bot");
+import "./server.js";
+import "./bot.js";
