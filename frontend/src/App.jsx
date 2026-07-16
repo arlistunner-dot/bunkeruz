@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { io } from "socket.io-client";
 
-const API_URL = "https://bunkeruz-api-1drt.onrender.com";
+const API_URL = "https://bunkeruz-api-ldrt.onrender.com";
 
 export default function App() {
   const [apiStatus, setApiStatus] = useState("tekshirilmoqda...");
