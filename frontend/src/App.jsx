@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { io } from "socket.io-client";
 
-const API_URL = import.meta.env.VITE_API_URL || "http://127.0.0.1:4000";
+const API_URL = "https://bunkeruz-api-1drt.onrender.com";
 
 export default function App() {
   const [apiStatus, setApiStatus] = useState("tekshirilmoqda...");
