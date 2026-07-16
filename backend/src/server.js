@@ -19,6 +19,21 @@ import {
 const PORT = process.env.PORT || 4000;
 
 const app = express();
+function sendBackendStatus(req, res) {
+  res.json({
+    ok: true,
+    status: "healthy",
+    app: "So‘nggi Joy Backend",
+    version: "0.5.0",
+    path: req.path,
+    message: "Backend ishlayapti"
+  });
+}
+
+app.get("/", sendBackendStatus);
+app.get("/health", sendBackendStatus);
+app.get("/api/health", sendBackendStatus);
+
 
 app.use(cors({
   origin: "*"
@@ -242,6 +257,16 @@ io.on("connection", (socket) => {
   });
 });
 
+
+app.get("*", (req, res) => {
+  res.json({
+    ok: true,
+    status: "fallback",
+    app: "So‘nggi Joy Backend",
+    path: req.path,
+    message: "Backend ishlayapti, lekin bu maxsus route emas"
+  });
+});
 server.listen(PORT, () => {
   console.log(`So‘nggi Joy backend ishga tushdi: http://127.0.0.1:${PORT}`);
 });
