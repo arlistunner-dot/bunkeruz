@@ -258,7 +258,7 @@ io.on("connection", (socket) => {
 });
 
 
-app.get("*", (req, res) => {
+app.use((req, res) => {
   res.json({
     ok: true,
     status: "fallback",
