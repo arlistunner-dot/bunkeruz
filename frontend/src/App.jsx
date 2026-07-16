@@ -48,7 +48,7 @@ export default function App() {
     });
 
     nextSocket.on("connect", () => {
-      setSocketStatus("Real-time serverga ulandi");
+      setSocketStatus("Real-time serverga ulandi"); setApiStatus("Backend ishlayapti");
     });
 
     nextSocket.on("disconnect", () => {
