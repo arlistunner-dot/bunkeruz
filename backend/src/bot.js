@@ -67,7 +67,7 @@ if (!BOT_TOKEN || BOT_TOKEN === "PASTE_YOUR_BOT_TOKEN_HERE") {
   process.exit(0);
 }
 
-const bot = new Telegraf(BOT_TOKEN);
+export const bot = new Telegraf(BOT_TOKEN);
 
 bot.start(async (ctx) => {
   const firstName = ctx.from?.first_name || "o‘yinchi";
@@ -115,18 +115,35 @@ bot.catch((error) => {
   console.error("Bot xatosi:", error);
 });
 
-bot.launch({
-  dropPendingUpdates: true
-});
+export function printBotInfo() {
+  console.log("✅ So‘nggi Joy Telegram bot tayyor.");
+  console.log("FRONTEND_URL:", FRONTEND_URL);
+  console.log("Mini App HTTPS:", isHttpsUrl(FRONTEND_URL) ? "ha" : "yo‘q");
+}
 
-console.log("✅ So‘nggi Joy Telegram bot ishga tushdi.");
-console.log("FRONTEND_URL:", FRONTEND_URL);
-console.log("Mini App HTTPS:", isHttpsUrl(FRONTEND_URL) ? "ha" : "yo‘q");
+export async function startPollingBot() {
+  await bot.launch({
+    dropPendingUpdates: true
+  });
 
-process.once("SIGINT", () => {
-  bot.stop("SIGINT");
-});
+  console.log("✅ So‘nggi Joy Telegram bot polling rejimida ishga tushdi.");
+  console.log("FRONTEND_URL:", FRONTEND_URL);
+  console.log("Mini App HTTPS:", isHttpsUrl(FRONTEND_URL) ? "ha" : "yo‘q");
 
-process.once("SIGTERM", () => {
-  bot.stop("SIGTERM");
-});
+  process.once("SIGINT", () => {
+    bot.stop("SIGINT");
+  });
+
+  process.once("SIGTERM", () => {
+    bot.stop("SIGTERM");
+  });
+}
+
+const isDirectRun = process.argv[1] && process.argv[1].replaceAll("\\", "/").endsWith("/bot.js");
+
+if (isDirectRun) {
+  startPollingBot().catch((error) => {
+    console.error("Bot polling xatosi:", error);
+    process.exit(1);
+  });
+}
