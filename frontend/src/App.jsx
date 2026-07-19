@@ -306,20 +306,109 @@ export default function App() {
               <span>O‘yin holati</span>
 
               {gameFinished ? (
-                <>
-                  <strong>Final: bunkerga kirganlar</strong>
-                  <p>
-                    O‘yin tugadi. Bunker joylari: {game?.bunkerSlots}. Quyidagi o‘yinchilar omon qoldi.
-                  </p>
-
-                  <div className="winner-list">
-                    {game?.winners?.map((winner) => (
-                      <div className="winner-row" key={winner.id}>
-                        🛡️ {winner.name}
-                      </div>
-                    ))}
+                <div className="final-screen">
+                  <div className="final-hero">
+                    <div className="final-trophy">🏆</div>
+                    <strong>Final: bunker eshiklari yopildi</strong>
+                    <p>
+                      Bunkerda {game?.bunkerSlots} ta joy bor edi. Quyidagi o‘yinchilar
+                      omon qolgan guruh sifatida tanlandi.
+                    </p>
                   </div>
-                </>
+
+                  <div className="final-grid">
+                    <div className="final-panel winners-panel">
+                      <div className="section-title">
+                        <div>
+                          <span>Omon qolganlar</span>
+                          <strong>🛡️ Bunkerga kirganlar</strong>
+                        </div>
+
+                        <em>{game?.winners?.length || 0} g‘olib</em>
+                      </div>
+
+                      <div className="winner-final-list">
+                        {game?.winners?.length > 0 ? (
+                          game.winners.map((winner) => {
+                            const winnerProfile = game?.players?.find((player) => player.id === winner.id);
+                            const revealedCards = (winnerProfile?.cardSlots || []).filter((card) => card.revealed);
+
+                            return (
+                              <div className="winner-final-card" key={winner.id}>
+                                <div className="final-player-head">
+                                  <strong>🏅 {winner.name}</strong>
+                                  <span>{winnerProfile?.isHost ? "Host" : "O‘yinchi"}</span>
+                                </div>
+
+                                <div className="final-mini-facts">
+                                  {revealedCards.slice(0, 4).map((card) => (
+                                    <div className="final-fact" key={card.key}>
+                                      <span>{card.label}</span>
+                                      <strong>{card.value}</strong>
+                                    </div>
+                                  ))}
+                                </div>
+                              </div>
+                            );
+                          })
+                        ) : (
+                          <p className="empty-card">G‘oliblar topilmadi.</p>
+                        )}
+                      </div>
+                    </div>
+
+                    <div className="final-panel">
+                      <div className="section-title">
+                        <div>
+                          <span>O‘yindan chiqarilganlar</span>
+                          <strong>☠️ Bunker tashqarisida qolganlar</strong>
+                        </div>
+                      </div>
+
+                      <div className="eliminated-final-list">
+                        {game?.players?.filter((player) => player.eliminated).length > 0 ? (
+                          game.players
+                            .filter((player) => player.eliminated)
+                            .map((player) => (
+                              <div className="eliminated-final-row" key={player.id}>
+                                <strong>{player.name}</strong>
+                                <span>Chiqarilgan</span>
+                              </div>
+                            ))
+                        ) : (
+                          <p className="empty-card">Hech kim chiqarilmagan.</p>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="final-stats">
+                    <div>
+                      <span>Jami o‘yinchi</span>
+                      <strong>{game?.players?.length || 0}</strong>
+                    </div>
+
+                    <div>
+                      <span>Bunker joylari</span>
+                      <strong>{game?.bunkerSlots}</strong>
+                    </div>
+
+                    <div>
+                      <span>Ovoz bilan chiqarilganlar</span>
+                      <strong>{game?.eliminationHistory?.length || 0}</strong>
+                    </div>
+                  </div>
+
+                  <div className="final-actions">
+                    <button type="button" onClick={leaveRoom}>
+                      Yangi o‘yin boshlash
+                    </button>
+
+                    <button type="button" className="secondary" onClick={() => setGameTab("players")}>
+                      Barcha profillarni ko‘rish
+                    </button>
+                  </div>
+                </div>
               ) : isVoting ? (
                 <>
                   <strong>
