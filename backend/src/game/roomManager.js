@@ -9,6 +9,7 @@ import {
 const rooms = new Map();
 
 const MIN_PLAYERS_TO_START = 2;
+const CHAT_LIMIT = 80;
 
 function makeId(prefix = "id") {
   return `${prefix}_${Date.now()}_${Math.random().toString(16).slice(2)}`;
@@ -42,6 +43,13 @@ function cleanName(name) {
   return value.slice(0, 24);
 }
 
+
+function cleanChatText(text) {
+  return String(text || "")
+    .replace(/\s+/g, " ")
+    .trim()
+    .slice(0, 400);
+}
 function publicRoom(room, viewerPlayerId = null) {
   if (!room) {
     return null;
@@ -54,6 +62,7 @@ function publicRoom(room, viewerPlayerId = null) {
     maxPlayers: room.maxPlayers,
     minPlayersToStart: MIN_PLAYERS_TO_START,
     createdAt: room.createdAt,
+    chat: room.chat || [],
     game: getPublicGame(room.game, room.players, viewerPlayerId, room.hostId),
     players: room.players.map((player) => ({
       id: player.id,
@@ -84,6 +93,7 @@ export function createRoom({ hostName, socketId }) {
     maxPlayers: 12,
     createdAt: new Date().toISOString(),
     players: [host],
+    chat: [],
     game: null
   };
 
@@ -391,6 +401,89 @@ export function removeSocketFromRooms(socketId) {
   return changedRoomCodes;
 }
 
+
+export function sendChatMessage({ roomCode, playerId, text }) {
+  const code = String(roomCode || "").trim().toUpperCase();
+  const room = rooms.get(code);
+
+  if (!room) {
+    return {
+      ok: false,
+      error: "Xona topilmadi"
+    };
+  }
+
+  const player = room.players.find((item) => item.id === playerId);
+
+  if (!player) {
+    return {
+      ok: false,
+      error: "O‘yinchi topilmadi"
+    };
+  }
+
+  const cleanText = cleanChatText(text);
+
+  if (!cleanText) {
+    return {
+      ok: false,
+      error: "Xabar yozing"
+    };
+  }
+
+  if (!room.chat) {
+    room.chat = [];
+  }
+
+  const message = {
+    id: makeId("chat"),
+    playerId: player.id,
+    name: player.name,
+    isHost: player.id === room.hostId,
+    text: cleanText,
+    createdAt: new Date().toISOString()
+  };
+
+  room.chat.push(message);
+
+  if (room.chat.length > CHAT_LIMIT) {
+    room.chat = room.chat.slice(-CHAT_LIMIT);
+  }
+
+  return {
+    ok: true,
+    roomCode: code,
+    message,
+    room: publicRoom(room, playerId)
+  };
+}
+
+export function clearRoomChat({ roomCode, playerId }) {
+  const code = String(roomCode || "").trim().toUpperCase();
+  const room = rooms.get(code);
+
+  if (!room) {
+    return {
+      ok: false,
+      error: "Xona topilmadi"
+    };
+  }
+
+  if (room.hostId !== playerId) {
+    return {
+      ok: false,
+      error: "Chatni faqat host tozalashi mumkin"
+    };
+  }
+
+  room.chat = [];
+
+  return {
+    ok: true,
+    roomCode: code,
+    room: publicRoom(room, playerId)
+  };
+}
 export function getRoom(roomCode, viewerPlayerId = null) {
   const code = String(roomCode || "").trim().toUpperCase();
   return publicRoom(rooms.get(code), viewerPlayerId);

@@ -14,7 +14,9 @@ import {
   startGame,
   revealCard,
   nextRound,
-  castVote
+  castVote,
+  sendChatMessage,
+  clearRoomChat
 } from "./game/roomManager.js";
 
 const PORT = process.env.PORT || 4000;
@@ -218,6 +220,32 @@ io.on("connection", (socket) => {
     }
   });
 
+  socket.on("chat:send", (payload, callback) => {
+    const result = sendChatMessage({
+      roomCode: payload?.roomCode,
+      playerId: payload?.playerId,
+      text: payload?.text
+    });
+
+    reply(callback, result);
+
+    if (result.ok && result.roomCode) {
+      emitRoom(result.roomCode);
+    }
+  });
+
+  socket.on("chat:clear", (payload, callback) => {
+    const result = clearRoomChat({
+      roomCode: payload?.roomCode,
+      playerId: payload?.playerId
+    });
+
+    reply(callback, result);
+
+    if (result.ok && result.roomCode) {
+      emitRoom(result.roomCode);
+    }
+  });
   socket.on("room:leave", (payload, callback) => {
     const result = leaveRoom({
       roomCode: payload?.roomCode,

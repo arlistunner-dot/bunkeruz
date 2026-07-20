@@ -18,6 +18,7 @@ export default function App() {
   const [error, setError] = useState("");
   const [busy, setBusy] = useState(false);
   const [gameTab, setGameTab] = useState("cards");
+  const [chatInput, setChatInput] = useState("");
 
   const me = useMemo(() => {
     if (!room || !playerId) {
@@ -238,6 +239,47 @@ export default function App() {
     });
   }
 
+  function sendChatMessage() {
+    const text = chatInput.trim();
+
+    if (!text || !socket || !room || !playerId) {
+      return;
+    }
+
+    setError("");
+
+    socket.emit("chat:send", {
+      roomCode: room.code,
+      playerId,
+      text
+    }, (response) => {
+      if (!response?.ok) {
+        setError(response?.error || "Xabar yuborib bo‘lmadi");
+        return;
+      }
+
+      setChatInput("");
+      setRoom(response.room);
+    });
+  }
+
+  function clearChat() {
+    if (!socket || !room || !playerId) {
+      return;
+    }
+
+    socket.emit("chat:clear", {
+      roomCode: room.code,
+      playerId
+    }, (response) => {
+      if (!response?.ok) {
+        setError(response?.error || "Chatni tozalab bo‘lmadi");
+        return;
+      }
+
+      setRoom(response.room);
+    });
+  }
   function leaveRoom() {
     if (socket && room && playerId) {
       socket.emit("room:leave", {
@@ -264,6 +306,74 @@ export default function App() {
     }
   }
 
+  function renderChatPanel(compact = false) {
+    const messages = room?.chat || [];
+
+    return (
+      <div className={compact ? "chat-panel compact-chat-panel" : "chat-panel"}>
+        <div className="section-title">
+          <div>
+            <span>Vaqtinchalik xona chati</span>
+            <strong>💬 Muhokama</strong>
+          </div>
+
+          <em>{messages.length}/80</em>
+        </div>
+
+        <div className="chat-messages">
+          {messages.length > 0 ? (
+            messages.map((message) => (
+              <div
+                className={message.playerId === playerId ? "chat-message own-message" : "chat-message"}
+                key={message.id}
+              >
+                <div className="chat-message-head">
+                  <strong>{message.name}{message.isHost ? " • Host" : ""}</strong>
+                  <span>
+                    {new Date(message.createdAt).toLocaleTimeString("uz-UZ", {
+                      hour: "2-digit",
+                      minute: "2-digit"
+                    })}
+                  </span>
+                </div>
+
+                <p>{message.text}</p>
+              </div>
+            ))
+          ) : (
+            <p className="empty-card">
+              Hali xabar yo‘q. Birinchi bo‘lib bahsni boshlang.
+            </p>
+          )}
+        </div>
+
+        <div className="chat-form">
+          <input
+            value={chatInput}
+            onChange={(event) => setChatInput(event.target.value)}
+            onKeyDown={(event) => {
+              if (event.key === "Enter") {
+                event.preventDefault();
+                sendChatMessage();
+              }
+            }}
+            placeholder="Masalan: menimcha jarrohni bunkerga olish kerak..."
+            maxLength={400}
+          />
+
+          <button type="button" onClick={sendChatMessage} disabled={!chatInput.trim()}>
+            Yuborish
+          </button>
+        </div>
+
+        {isHost && messages.length > 0 && (
+          <button type="button" className="small-secondary clear-chat-button" onClick={clearChat}>
+            Chatni tozalash
+          </button>
+        )}
+      </div>
+    );
+  }
   const minPlayers = room?.minPlayersToStart || 2;
   const allReady = room?.players?.length >= minPlayers && room.players.every((player) => player.ready);
 
@@ -504,7 +614,14 @@ export default function App() {
               </button>
             </div>
 
-            <div className={`game-tab-section ${gameTab === "cards" ? "mobile-active" : ""}`}>
+
+              <button
+                type="button"
+                className={gameTab === "chat" ? "active" : ""}
+                onClick={() => setGameTab("chat")}
+              >
+                Chat
+              </button>            <div className={`game-tab-section ${gameTab === "cards" ? "mobile-active" : ""}`}>
               <div className="my-card-panel">
                 <div className="section-title">
                   <div>
