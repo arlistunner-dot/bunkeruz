@@ -612,16 +612,15 @@ export default function App() {
               >
                 Ovoz
               </button>
-            </div>
-
-
               <button
                 type="button"
                 className={gameTab === "chat" ? "active" : ""}
                 onClick={() => setGameTab("chat")}
               >
                 Chat
-              </button>            <div className={`game-tab-section ${gameTab === "cards" ? "mobile-active" : ""}`}>
+              </button>
+            </div>
+<div className={`game-tab-section ${gameTab === "cards" ? "mobile-active" : ""}`}>
               <div className="my-card-panel">
                 <div className="section-title">
                   <div>
@@ -746,6 +745,9 @@ export default function App() {
               )}
             </div>
 
+            <div className={`game-tab-section ${gameTab === "chat" ? "mobile-active" : ""}`}>
+              {renderChatPanel()}
+            </div>
             <div className={`game-tab-section players-tab-section ${gameTab === "players" ? "mobile-active" : ""}`}>
               <div className="section-title public-title">
                 <div>
