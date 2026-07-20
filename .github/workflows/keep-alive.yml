@@ -1,0 +1,14 @@
+name: Bunkeruz Keep Alive
+
+on:
+  schedule:
+    - cron: "*/5 * * * *"
+  workflow_dispatch:
+
+jobs:
+  ping:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Ping Render backend
+        run: |
+          curl -fsS https://bunkeruz-api-ldrt.onrender.com/api/health
