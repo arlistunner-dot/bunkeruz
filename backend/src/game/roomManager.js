@@ -50,6 +50,11 @@ function cleanChatText(text) {
     .trim()
     .slice(0, 400);
 }
+
+function cleanTelegramId(telegramId) {
+  const value = String(telegramId || "").trim();
+  return value ? value.slice(0, 64) : null;
+}
 function publicRoom(room, viewerPlayerId = null) {
   if (!room) {
     return null;
@@ -76,13 +81,14 @@ function publicRoom(room, viewerPlayerId = null) {
   };
 }
 
-export function createRoom({ hostName, socketId }) {
+export function createRoom({ hostName, socketId, telegramId }) {
   const code = makeRoomCode();
 
   const host = {
     id: makeId("player"),
     socketId,
     name: cleanName(hostName),
+    telegramId: cleanTelegramId(telegramId),
     ready: false,
     connected: true,
     joinedAt: new Date().toISOString()
@@ -109,7 +115,7 @@ export function createRoom({ hostName, socketId }) {
   };
 }
 
-export function joinRoom({ roomCode, playerName, socketId }) {
+export function joinRoom({ roomCode, playerName, socketId, telegramId }) {
   const code = String(roomCode || "").trim().toUpperCase();
   const room = rooms.get(code);
 
@@ -138,6 +144,7 @@ export function joinRoom({ roomCode, playerName, socketId }) {
     id: makeId("player"),
     socketId,
     name: cleanName(playerName),
+    telegramId: cleanTelegramId(telegramId),
     ready: false,
     connected: true,
     joinedAt: new Date().toISOString()
@@ -154,7 +161,7 @@ export function joinRoom({ roomCode, playerName, socketId }) {
 }
 
 
-export function reconnectRoom({ roomCode, playerId, socketId }) {
+export function reconnectRoom({ roomCode, playerId, socketId, telegramId }) {
   const code = String(roomCode || "").trim().toUpperCase();
   const room = rooms.get(code);
 
@@ -516,6 +523,51 @@ export function clearRoomChat({ roomCode, playerId }) {
     ok: true,
     roomCode: code,
     room: publicRoom(room, playerId)
+  };
+}
+
+export function resumeRoomByTelegramId({ telegramId, socketId }) {
+  const cleanId = cleanTelegramId(telegramId);
+
+  if (!cleanId) {
+    return {
+      ok: false,
+      error: "Telegram ID topilmadi"
+    };
+  }
+
+  let matchedRoom = null;
+  let matchedPlayer = null;
+
+  for (const room of rooms.values()) {
+    const player = room.players.find((item) => item.telegramId === cleanId);
+
+    if (!player) {
+      continue;
+    }
+
+    matchedRoom = room;
+    matchedPlayer = player;
+  }
+
+  if (!matchedRoom || !matchedPlayer) {
+    return {
+      ok: false,
+      error: "Avvalgi xona topilmadi"
+    };
+  }
+
+  matchedPlayer.socketId = socketId;
+  matchedPlayer.connected = true;
+  matchedPlayer.disconnectedAt = null;
+  matchedPlayer.reconnectedAt = new Date().toISOString();
+  matchedRoom.updatedAt = new Date().toISOString();
+
+  return {
+    ok: true,
+    roomCode: matchedRoom.code,
+    room: publicRoom(matchedRoom, matchedPlayer.id),
+    playerId: matchedPlayer.id
   };
 }
 export function getRoom(roomCode, viewerPlayerId = null) {

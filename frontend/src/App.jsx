@@ -29,6 +29,25 @@ function clearSession() {
 }
 
 
+
+function getTelegramUser() {
+  if (typeof window === "undefined") {
+    return { id: "", name: "" };
+  }
+
+  const tgUser = window.Telegram?.WebApp?.initDataUnsafe?.user;
+
+  if (!tgUser) {
+    return { id: "", name: "" };
+  }
+
+  const fullName = [tgUser.first_name, tgUser.last_name].filter(Boolean).join(" ");
+
+  return {
+    id: tgUser.id ? String(tgUser.id) : "",
+    name: fullName || tgUser.username || ""
+  };
+}
 export default function App() {
   const [apiStatus, setApiStatus] = useState("tekshirilmoqda...");
   const [socketStatus, setSocketStatus] = useState("ulanmoqda...");
@@ -83,12 +102,37 @@ export default function App() {
       if (saved?.roomCode && saved?.playerId) {
         nextSocket.emit("room:reconnect", {
           roomCode: saved.roomCode,
-          playerId: saved.playerId
+          playerId: saved.playerId,
+          telegramId: getTelegramUser().id
         }, (response) => {
           if (!response?.ok) {
             clearSession();
             return;
           }
+
+          setRoom(response.room);
+          setPlayerId(response.playerId);
+          setGameTab("cards");
+        });
+
+        return;
+      }
+
+      const telegramId = getTelegramUser().id;
+
+      if (telegramId) {
+        nextSocket.emit("room:resume", {
+          telegramId
+        }, (response) => {
+          if (!response?.ok) {
+            return;
+          }
+
+          saveSession({
+            roomCode: response.roomCode,
+            playerId: response.playerId,
+            name: getTelegramUser().name
+          });
 
           setRoom(response.room);
           setPlayerId(response.playerId);

@@ -7,6 +7,7 @@ import {
   createRoom,
   joinRoom,
   reconnectRoom,
+  resumeRoomByTelegramId,
   toggleReady,
   leaveRoom,
   removeSocketFromRooms,
@@ -97,11 +98,25 @@ io.on("connection", (socket) => {
     socketId: socket.id
   });
 
+  socket.on("room:resume", (payload, callback) => {
+    const result = resumeRoomByTelegramId({
+      telegramId: payload?.telegramId,
+      socketId: socket.id
+    });
+
+    reply(callback, result);
+
+    if (result.ok && result.roomCode) {
+      socket.join(result.roomCode);
+      emitRoom(result.roomCode);
+    }
+  });
   socket.on("room:reconnect", (payload, callback) => {
     const result = reconnectRoom({
       roomCode: payload?.roomCode,
       playerId: payload?.playerId,
-      socketId: socket.id
+      socketId: socket.id,
+      telegramId: payload?.telegramId
     });
 
     reply(callback, result);
