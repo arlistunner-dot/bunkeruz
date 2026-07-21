@@ -62,6 +62,7 @@ function publicRoom(room, viewerPlayerId = null) {
     maxPlayers: room.maxPlayers,
     minPlayersToStart: MIN_PLAYERS_TO_START,
     createdAt: room.createdAt,
+    updatedAt: room.updatedAt,
     chat: room.chat || [],
     chatLimit: CHAT_LIMIT,
     game: getPublicGame(room.game, room.players, viewerPlayerId, room.hostId),
@@ -93,6 +94,7 @@ export function createRoom({ hostName, socketId }) {
     hostId: host.id,
     maxPlayers: 12,
     createdAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString(),
     players: [host],
     chat: [],
     game: null
@@ -151,6 +153,40 @@ export function joinRoom({ roomCode, playerName, socketId }) {
   };
 }
 
+
+export function reconnectRoom({ roomCode, playerId, socketId }) {
+  const code = String(roomCode || "").trim().toUpperCase();
+  const room = rooms.get(code);
+
+  if (!room) {
+    return {
+      ok: false,
+      error: "Avvalgi xona topilmadi"
+    };
+  }
+
+  const player = room.players.find((item) => item.id === playerId);
+
+  if (!player) {
+    return {
+      ok: false,
+      error: "Avvalgi o‘yinchi topilmadi"
+    };
+  }
+
+  player.socketId = socketId;
+  player.connected = true;
+  player.disconnectedAt = null;
+  player.reconnectedAt = new Date().toISOString();
+  room.updatedAt = new Date().toISOString();
+
+  return {
+    ok: true,
+    roomCode: code,
+    room: publicRoom(room, player.id),
+    playerId: player.id
+  };
+}
 export function toggleReady({ roomCode, playerId }) {
   const code = String(roomCode || "").trim().toUpperCase();
   const room = rooms.get(code);
@@ -382,21 +418,18 @@ export function removeSocketFromRooms(socketId) {
   const changedRoomCodes = [];
 
   for (const room of rooms.values()) {
-    const beforeCount = room.players.length;
+    const player = room.players.find((item) => item.socketId === socketId);
 
-    room.players = room.players.filter((player) => player.socketId !== socketId);
-
-    if (room.players.length !== beforeCount) {
-      if (room.players.length === 0) {
-        rooms.delete(room.code);
-      } else {
-        if (!room.players.some((player) => player.id === room.hostId)) {
-          room.hostId = room.players[0].id;
-        }
-
-        changedRoomCodes.push(room.code);
-      }
+    if (!player) {
+      continue;
     }
+
+    player.connected = false;
+    player.socketId = null;
+    player.disconnectedAt = new Date().toISOString();
+    room.updatedAt = new Date().toISOString();
+
+    changedRoomCodes.push(room.code);
   }
 
   return changedRoomCodes;
@@ -498,8 +531,10 @@ export function getRoomRecipientViews(roomCode) {
     return [];
   }
 
-  return room.players.map((player) => ({
-    socketId: player.socketId,
-    room: publicRoom(room, player.id)
-  }));
+  return room.players
+    .filter((player) => player.connected && player.socketId)
+    .map((player) => ({
+      socketId: player.socketId,
+      room: publicRoom(room, player.id)
+    }));
 }

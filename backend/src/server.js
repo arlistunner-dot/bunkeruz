@@ -6,6 +6,7 @@ import { bot, printBotInfo } from "./bot.js";
 import {
   createRoom,
   joinRoom,
+  reconnectRoom,
   toggleReady,
   leaveRoom,
   removeSocketFromRooms,
@@ -96,6 +97,20 @@ io.on("connection", (socket) => {
     socketId: socket.id
   });
 
+  socket.on("room:reconnect", (payload, callback) => {
+    const result = reconnectRoom({
+      roomCode: payload?.roomCode,
+      playerId: payload?.playerId,
+      socketId: socket.id
+    });
+
+    reply(callback, result);
+
+    if (result.ok && result.roomCode) {
+      socket.join(result.roomCode);
+      emitRoom(result.roomCode);
+    }
+  });
   socket.on("room:create", (payload, callback) => {
     try {
       const result = createRoom({

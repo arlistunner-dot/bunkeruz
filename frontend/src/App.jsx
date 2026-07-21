@@ -2,6 +2,32 @@ import { useEffect, useMemo, useState } from "react";
 import { io } from "socket.io-client";
 
 const API_URL = "https://bunkeruz-api-ldrt.onrender.com";
+const SESSION_KEY = "songgi-joy-session-v1";
+
+function saveSession(session) {
+  try {
+    localStorage.setItem(SESSION_KEY, JSON.stringify(session));
+  } catch {
+    // localStorage ishlamasa ham o‘yin davom etadi
+  }
+}
+
+function readSession() {
+  try {
+    return JSON.parse(localStorage.getItem(SESSION_KEY) || "null");
+  } catch {
+    return null;
+  }
+}
+
+function clearSession() {
+  try {
+    localStorage.removeItem(SESSION_KEY);
+  } catch {
+    // localStorage ishlamasa ham o‘yin davom etadi
+  }
+}
+
 
 export default function App() {
   const [apiStatus, setApiStatus] = useState("tekshirilmoqda...");
@@ -49,7 +75,26 @@ export default function App() {
     });
 
     nextSocket.on("connect", () => {
-      setSocketStatus("Real-time serverga ulandi"); setApiStatus("Backend ishlayapti");
+      setSocketStatus("Real-time serverga ulandi");
+      setApiStatus("Backend ishlayapti");
+
+      const saved = readSession();
+
+      if (saved?.roomCode && saved?.playerId) {
+        nextSocket.emit("room:reconnect", {
+          roomCode: saved.roomCode,
+          playerId: saved.playerId
+        }, (response) => {
+          if (!response?.ok) {
+            clearSession();
+            return;
+          }
+
+          setRoom(response.room);
+          setPlayerId(response.playerId);
+          setGameTab("cards");
+        });
+      }
     });
 
     nextSocket.on("disconnect", () => {
