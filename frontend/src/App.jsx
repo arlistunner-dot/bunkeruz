@@ -48,6 +48,59 @@ function getTelegramUser() {
     name: fullName || tgUser.username || ""
   };
 }
+
+function tryAutoResumeRoom(nextSocket, { setRoom, setPlayerId, setGameTab, setError }) {
+  const saved = readSession();
+  const telegramUser = getTelegramUser();
+  const telegramId = telegramUser.id;
+
+  const finishResume = (response) => {
+    if (!response?.ok) {
+      return false;
+    }
+
+    saveSession({
+      roomCode: response.roomCode,
+      playerId: response.playerId,
+      name: telegramUser.name
+    });
+
+    setRoom(response.room);
+    setPlayerId(response.playerId);
+    setGameTab("cards");
+    setError("");
+    return true;
+  };
+
+  const resumeByTelegram = () => {
+    if (!telegramId) {
+      return;
+    }
+
+    nextSocket.emit("room:resume", { telegramId }, (response) => {
+      finishResume(response);
+    });
+  };
+
+  if (saved?.roomCode && saved?.playerId) {
+    nextSocket.emit("room:reconnect", {
+      roomCode: saved.roomCode,
+      playerId: saved.playerId,
+      telegramId
+    }, (response) => {
+      if (finishResume(response)) {
+        return;
+      }
+
+      clearSession();
+      resumeByTelegram();
+    });
+
+    return;
+  }
+
+  resumeByTelegram();
+}
 export default function App() {
   const [apiStatus, setApiStatus] = useState("tekshirilmoqda...");
   const [socketStatus, setSocketStatus] = useState("ulanmoqda...");
@@ -97,50 +150,15 @@ export default function App() {
       setSocketStatus("Real-time serverga ulandi");
       setApiStatus("Backend ishlayapti");
 
-      const saved = readSession();
-
-      if (saved?.roomCode && saved?.playerId) {
-        nextSocket.emit("room:reconnect", {
-          roomCode: saved.roomCode,
-          playerId: saved.playerId,
-          telegramId: getTelegramUser().id
-        }, (response) => {
-          if (!response?.ok) {
-            clearSession();
-            return;
-          }
-
-          setRoom(response.room);
-          setPlayerId(response.playerId);
-          setGameTab("cards");
+      setTimeout(() => {
+        tryAutoResumeRoom(nextSocket, {
+          setRoom,
+          setPlayerId,
+          setGameTab,
+          setError
         });
-
-        return;
-      }
-
-      const telegramId = getTelegramUser().id;
-
-      if (telegramId) {
-        nextSocket.emit("room:resume", {
-          telegramId
-        }, (response) => {
-          if (!response?.ok) {
-            return;
-          }
-
-          saveSession({
-            roomCode: response.roomCode,
-            playerId: response.playerId,
-            name: getTelegramUser().name
-          });
-
-          setRoom(response.room);
-          setPlayerId(response.playerId);
-          setGameTab("cards");
-        });
-      }
+      }, 700);
     });
-
     nextSocket.on("disconnect", () => {
       setSocketStatus("Real-time aloqa uzildi");
     });
