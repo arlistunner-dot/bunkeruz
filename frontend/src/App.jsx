@@ -101,6 +101,56 @@ function tryAutoResumeRoom(nextSocket, { setRoom, setPlayerId, setGameTab, setEr
 
   resumeByTelegram();
 }
+
+const CARD_VISUALS = {
+  job: { icon: "🧑‍🚀", tone: "job", title: "Kasb" },
+  age: { icon: "⏳", tone: "age", title: "Yosh" },
+  health: { icon: "🧬", tone: "health", title: "Sog‘liq" },
+  character: { icon: "🎭", tone: "character", title: "Xarakter" },
+  phobia: { icon: "😨", tone: "phobia", title: "Fobiya" },
+  hobby: { icon: "🎯", tone: "hobby", title: "Hobbi" },
+  inventory: { icon: "🎒", tone: "inventory", title: "Inventar" },
+  special: { icon: "✨", tone: "special", title: "Maxsus" }
+};
+
+function getCardVisual(key) {
+  return CARD_VISUALS[key] || { icon: "🃏", tone: "default", title: "Karta" };
+}
+
+function getCardRarity(card) {
+  const text = `${card?.label || ""} ${card?.value || ""}`.toLowerCase();
+
+  if (
+    card?.key === "special" ||
+    text.includes("maxsus") ||
+    text.includes("himoya") ||
+    text.includes("bekor") ||
+    text.includes("almashtira")
+  ) {
+    return { key: "legendary", label: "LEGENDARY" };
+  }
+
+  if (
+    card?.key === "job" ||
+    card?.key === "inventory" ||
+    text.includes("shifokor") ||
+    text.includes("olim") ||
+    text.includes("generator") ||
+    text.includes("laboratoriya")
+  ) {
+    return { key: "epic", label: "EPIC" };
+  }
+
+  if (
+    card?.key === "health" ||
+    card?.key === "phobia" ||
+    card?.key === "character"
+  ) {
+    return { key: "rare", label: "RARE" };
+  }
+
+  return { key: "common", label: "COMMON" };
+}
 export default function App() {
   const [apiStatus, setApiStatus] = useState("tekshirilmoqda...");
   const [socketStatus, setSocketStatus] = useState("ulanmoqda...");
@@ -560,12 +610,16 @@ export default function App() {
                                 </div>
 
                                 <div className="final-mini-facts">
-                                  {revealedCards.slice(0, 4).map((card) => (
-                                    <div className="final-fact" key={card.key}>
-                                      <span>{card.label}</span>
-                                      <strong>{card.value}</strong>
-                                    </div>
-                                  ))}
+                                  {revealedCards.slice(0, 4).map((card) => {
+                                    const visual = getCardVisual(card.key);
+
+                                    return (
+                                      <div className={`final-fact card-tone-${visual.tone}`} key={card.key}>
+                                        <span>{visual.icon} {card.label}</span>
+                                        <strong>{card.value}</strong>
+                                      </div>
+                                    );
+                                  })}
                                 </div>
                               </div>
                             );
@@ -895,15 +949,24 @@ export default function App() {
                     </div>
 
                     <div className="facts-list full-slots">
-                      {(player.cardSlots || []).map((item) => (
-                        <div
-                          className={item.revealed ? "fact-row opened-slot" : "fact-row closed-slot"}
-                          key={item.key}
-                        >
-                          <span>{item.label}</span>
-                          <strong>{item.revealed ? item.value : "Yopiq"}</strong>
-                        </div>
-                      ))}
+                      {(player.cardSlots || []).map((item) => {
+                        const visual = getCardVisual(item.key);
+                        const rarity = getCardRarity(item);
+
+                        return (
+                          <div
+                            className={`fact-row visual-slot ${item.revealed ? "opened-slot" : "closed-slot"} card-tone-${visual.tone} rarity-${rarity.key}`}
+                            key={item.key}
+                          >
+                            <div className="slot-icon">{item.revealed ? visual.icon : "🔒"}</div>
+
+                            <div className="slot-text">
+                              <span>{item.label}</span>
+                              <strong>{item.revealed ? item.value : "Yopiq karta"}</strong>
+                            </div>
+                          </div>
+                        );
+                      })}
                     </div>
                   </div>
                 ))}
