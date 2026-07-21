@@ -1699,3 +1699,33 @@ body,
 }
 
 /* === V1 CHAT POLISH END === */
+
+/* === V1 CHAT ONLY SCREEN START === */
+
+.chat-only-main {
+  gap: 10px !important;
+}
+
+.chat-only-main .game-tab-section.mobile-active {
+  margin-top: 0 !important;
+}
+
+.chat-only-main .chat-panel {
+  height: min(620px, calc(100vh - 200px)) !important;
+  min-height: 430px !important;
+  max-height: 70vh !important;
+}
+
+.chat-only-main .chat-messages {
+  min-height: 0 !important;
+}
+
+@media (max-width: 430px) {
+  .chat-only-main .chat-panel {
+    height: min(560px, calc(100vh - 178px)) !important;
+    min-height: 390px !important;
+    max-height: none !important;
+  }
+}
+
+/* === V1 CHAT ONLY SCREEN END === */

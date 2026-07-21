@@ -308,6 +308,7 @@ export default function App() {
 
   function renderChatPanel(compact = false) {
     const messages = room?.chat || [];
+    const chatLimit = room?.chatLimit || 300;
 
     return (
       <div className={compact ? "chat-panel compact-chat-panel" : "chat-panel"}>
@@ -317,7 +318,7 @@ export default function App() {
             <strong>💬 Muhokama</strong>
           </div>
 
-          <em>{messages.length}/80</em>
+          <em>{messages.length}/{chatLimit}</em>
         </div>
 
         <div className="chat-messages">
@@ -386,7 +387,8 @@ export default function App() {
     return (
       <main className="app-shell game-shell">
         <section className="game-layout">
-          <div className="game-main">
+          <div className={gameTab === "chat" ? "game-main chat-only-main" : "game-main"}>
+            {gameTab !== "chat" && (<>
             <div className="top-line">
               <div>
                 <div className="badge">
@@ -585,6 +587,8 @@ export default function App() {
                 </>
               )}
             </div>
+
+            </>)}
 
             {error && <div className="error-box">{error}</div>}
 

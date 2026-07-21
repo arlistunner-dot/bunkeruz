@@ -9,7 +9,7 @@ import {
 const rooms = new Map();
 
 const MIN_PLAYERS_TO_START = 2;
-const CHAT_LIMIT = 80;
+const CHAT_LIMIT = 300;
 
 function makeId(prefix = "id") {
   return `${prefix}_${Date.now()}_${Math.random().toString(16).slice(2)}`;
@@ -63,6 +63,7 @@ function publicRoom(room, viewerPlayerId = null) {
     minPlayersToStart: MIN_PLAYERS_TO_START,
     createdAt: room.createdAt,
     chat: room.chat || [],
+    chatLimit: CHAT_LIMIT,
     game: getPublicGame(room.game, room.players, viewerPlayerId, room.hostId),
     players: room.players.map((player) => ({
       id: player.id,
