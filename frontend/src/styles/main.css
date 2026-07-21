@@ -1962,3 +1962,188 @@ body,
 }
 
 /* === V1 VISUAL CARDS END === */
+
+
+
+/* === REAL TABLE CARDS START === */
+
+.real-card-grid {
+  display: grid !important;
+  grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  gap: 12px !important;
+  align-items: start !important;
+}
+
+.table-card-wrap {
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 8px !important;
+}
+
+.table-card {
+  position: relative !important;
+  width: 100% !important;
+  aspect-ratio: 3 / 4.25 !important;
+  border-radius: 18px !important;
+  overflow: hidden !important;
+  border: 2px solid rgba(255,255,255,0.15) !important;
+  box-shadow:
+    0 12px 26px rgba(0,0,0,0.34),
+    inset 0 1px 0 rgba(255,255,255,0.22) !important;
+}
+
+.table-card.face-up {
+  background: linear-gradient(180deg, #fff9ed, #efe4cf) !important;
+  color: #181818 !important;
+}
+
+.table-card.face-down {
+  background:
+    radial-gradient(circle at top, rgba(255,90,90,0.2), transparent 32%),
+    linear-gradient(135deg, #160b12, #301321 45%, #120811) !important;
+  color: #fff !important;
+}
+
+.table-card::before {
+  content: "" !important;
+  position: absolute !important;
+  inset: 7px !important;
+  border-radius: 13px !important;
+  pointer-events: none !important;
+}
+
+.table-card.face-up::before {
+  border: 1px solid rgba(0,0,0,0.12) !important;
+}
+
+.table-card.face-down::before {
+  border: 1px solid rgba(255,255,255,0.15) !important;
+}
+
+.table-card-header {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  padding: 11px 11px 8px !important;
+  border-bottom: 1px solid rgba(0,0,0,0.09) !important;
+}
+
+.table-card-type {
+  font-size: 10px !important;
+  font-weight: 1000 !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.08em !important;
+  color: rgba(0,0,0,0.72) !important;
+}
+
+.table-card-icon {
+  font-size: 21px !important;
+}
+
+.table-card-body {
+  min-height: 118px !important;
+  padding: 12px 10px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  text-align: center !important;
+}
+
+.table-card-main-text {
+  font-size: 14px !important;
+  line-height: 1.25 !important;
+  font-weight: 900 !important;
+  color: #171717 !important;
+  word-break: break-word !important;
+}
+
+.table-card-footer {
+  padding: 8px 10px 10px !important;
+  border-top: 1px solid rgba(0,0,0,0.08) !important;
+  text-align: center !important;
+}
+
+.table-card-mini {
+  font-size: 9px !important;
+  font-weight: 900 !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.08em !important;
+  color: rgba(0,0,0,0.52) !important;
+}
+
+.table-card-back {
+  width: 100% !important;
+  height: 100% !important;
+  padding: 13px !important;
+  display: flex !important;
+}
+
+.table-card-back-inner {
+  flex: 1 !important;
+  border-radius: 13px !important;
+  border: 1px solid rgba(255,255,255,0.15) !important;
+  background:
+    repeating-linear-gradient(
+      45deg,
+      rgba(255,255,255,0.035),
+      rgba(255,255,255,0.035) 9px,
+      transparent 9px,
+      transparent 18px
+    ),
+    linear-gradient(135deg, rgba(255,255,255,0.05), rgba(255,255,255,0.01)) !important;
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 8px !important;
+  text-align: center !important;
+}
+
+.table-card-back-title {
+  font-size: 13px !important;
+  font-weight: 1000 !important;
+  letter-spacing: 0.08em !important;
+  color: #ffddd2 !important;
+}
+
+.table-card-back-mark {
+  font-size: 32px !important;
+}
+
+.table-card-back-sub {
+  font-size: 10px !important;
+  font-weight: 900 !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.08em !important;
+  color: rgba(255,255,255,0.72) !important;
+}
+
+.table-card-action button {
+  width: 100% !important;
+  min-height: 36px !important;
+  border-radius: 12px !important;
+  font-size: 11px !important;
+  font-weight: 900 !important;
+}
+
+.card-tone-job.face-up { box-shadow: 0 12px 26px rgba(255,166,77,0.24), inset 0 1px 0 rgba(255,255,255,0.22) !important; }
+.card-tone-health.face-up { box-shadow: 0 12px 26px rgba(46,204,113,0.24), inset 0 1px 0 rgba(255,255,255,0.22) !important; }
+.card-tone-character.face-up { box-shadow: 0 12px 26px rgba(155,89,182,0.24), inset 0 1px 0 rgba(255,255,255,0.22) !important; }
+.card-tone-phobia.face-up { box-shadow: 0 12px 26px rgba(231,76,60,0.24), inset 0 1px 0 rgba(255,255,255,0.22) !important; }
+.card-tone-hobby.face-up { box-shadow: 0 12px 26px rgba(52,152,219,0.24), inset 0 1px 0 rgba(255,255,255,0.22) !important; }
+.card-tone-inventory.face-up { box-shadow: 0 12px 26px rgba(241,196,15,0.24), inset 0 1px 0 rgba(255,255,255,0.22) !important; }
+.card-tone-special.face-up { box-shadow: 0 12px 26px rgba(255,105,180,0.26), inset 0 1px 0 rgba(255,255,255,0.22) !important; }
+.card-tone-age.face-up { box-shadow: 0 12px 26px rgba(149,165,166,0.22), inset 0 1px 0 rgba(255,255,255,0.22) !important; }
+
+@media (max-width: 430px) {
+  .real-card-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    gap: 10px !important;
+  }
+
+  .table-card-main-text {
+    font-size: 13px !important;
+  }
+}
+
+/* === REAL TABLE CARDS END === */

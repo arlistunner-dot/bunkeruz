@@ -804,27 +804,60 @@ export default function App() {
                   </em>
                 </div>
 
-                <div className="card-choice-grid">
-                  {game?.myCard?.map((card) => (
-                    <div className={card.revealed ? "card-choice revealed" : "card-choice"} key={card.key}>
-                      <span>{card.label}</span>
-                      <strong>{card.value}</strong>
+                <div className="card-choice-grid real-card-grid">
+                  {game?.myCard?.map((card) => {
+                    const visual = getCardVisual(card.key);
 
-                      {card.revealed ? (
-                        <button type="button" disabled>
-                          Ochilgan
-                        </button>
-                      ) : (
-                        <button
-                          type="button"
-                          disabled={!card.canReveal}
-                          onClick={() => revealCard(card.key)}
-                        >
-                          Shu kartani ochish
-                        </button>
-                      )}
-                    </div>
-                  ))}
+                    return (
+                      <div
+                        className={`table-card-wrap ${card.revealed ? "is-revealed" : "is-hidden"}`}
+                        key={card.key}
+                      >
+                        <div className={`table-card ${card.revealed ? "face-up" : "face-down"} card-tone-${visual.tone}`}>
+                          {card.revealed ? (
+                            <>
+                              <div className="table-card-header">
+                                <span className="table-card-type">{card.label}</span>
+                                <span className="table-card-icon">{visual.icon}</span>
+                              </div>
+
+                              <div className="table-card-body">
+                                <div className="table-card-main-text">{card.value}</div>
+                              </div>
+
+                              <div className="table-card-footer">
+                                <span className="table-card-mini">Bunker kartasi</span>
+                              </div>
+                            </>
+                          ) : (
+                            <div className="table-card-back">
+                              <div className="table-card-back-inner">
+                                <div className="table-card-back-title">SO‘NGGI JOY</div>
+                                <div className="table-card-back-mark">🂠</div>
+                                <div className="table-card-back-sub">{card.label}</div>
+                              </div>
+                            </div>
+                          )}
+                        </div>
+
+                        <div className="table-card-action">
+                          {card.revealed ? (
+                            <button type="button" disabled>
+                              Ochilgan
+                            </button>
+                          ) : (
+                            <button
+                              type="button"
+                              disabled={!card.canReveal}
+                              onClick={() => revealCard(card.key)}
+                            >
+                              Kartani ochish
+                            </button>
+                          )}
+                        </div>
+                      </div>
+                    );
+                  })}
                 </div>
               </div>
             </div>
