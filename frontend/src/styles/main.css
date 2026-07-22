@@ -2147,3 +2147,234 @@ body,
 }
 
 /* === REAL TABLE CARDS END === */
+
+
+
+/* === PUBLIC PLAYER TABLE CARDS START === */
+
+.facts-list.full-slots {
+  display: grid !important;
+  grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  gap: 10px !important;
+}
+
+.facts-list.full-slots .fact-row,
+.facts-list.full-slots .visual-slot,
+.mini-table-card {
+  position: relative !important;
+  min-height: 118px !important;
+  aspect-ratio: 3 / 4 !important;
+  padding: 10px !important;
+  border-radius: 16px !important;
+  overflow: hidden !important;
+  display: flex !important;
+  flex-direction: column !important;
+  justify-content: space-between !important;
+  border: 2px solid rgba(255,255,255,0.12) !important;
+  box-shadow:
+    0 10px 22px rgba(0,0,0,0.26),
+    inset 0 1px 0 rgba(255,255,255,0.18) !important;
+}
+
+.facts-list.full-slots .opened-slot,
+.facts-list.full-slots .visual-slot.opened-slot,
+.mini-table-card.face-up {
+  background: linear-gradient(180deg, #fff8ea, #eadfc8) !important;
+  color: #171717 !important;
+  animation: tableCardFlipIn 420ms ease both !important;
+}
+
+.facts-list.full-slots .closed-slot,
+.facts-list.full-slots .visual-slot.closed-slot,
+.mini-table-card.face-down {
+  background:
+    radial-gradient(circle at top, rgba(255, 74, 92, 0.22), transparent 34%),
+    linear-gradient(135deg, #150a12, #311321 48%, #10070f) !important;
+  color: #fff !important;
+}
+
+.facts-list.full-slots .fact-row::before,
+.facts-list.full-slots .visual-slot::before,
+.mini-table-card::before {
+  content: "" !important;
+  position: absolute !important;
+  inset: 6px !important;
+  border-radius: 12px !important;
+  pointer-events: none !important;
+  border: 1px solid rgba(0,0,0,0.10) !important;
+}
+
+.facts-list.full-slots .closed-slot::before,
+.facts-list.full-slots .visual-slot.closed-slot::before,
+.mini-table-card.face-down::before {
+  border-color: rgba(255,255,255,0.14) !important;
+}
+
+.facts-list.full-slots .closed-slot::after,
+.facts-list.full-slots .visual-slot.closed-slot::after,
+.mini-table-card.face-down::after {
+  content: "SO‘NGGI JOY" !important;
+  position: absolute !important;
+  left: 50% !important;
+  top: 50% !important;
+  transform: translate(-50%, -50%) rotate(-12deg) !important;
+  width: 72% !important;
+  padding: 8px 6px !important;
+  border-radius: 12px !important;
+  text-align: center !important;
+  font-size: 10px !important;
+  font-weight: 1000 !important;
+  letter-spacing: 0.08em !important;
+  color: #ffded4 !important;
+  background:
+    repeating-linear-gradient(
+      45deg,
+      rgba(255,255,255,0.04),
+      rgba(255,255,255,0.04) 8px,
+      transparent 8px,
+      transparent 16px
+    ),
+    rgba(255,255,255,0.055) !important;
+  border: 1px solid rgba(255,255,255,0.12) !important;
+}
+
+.facts-list.full-slots .opened-slot::after,
+.facts-list.full-slots .visual-slot.opened-slot::after,
+.mini-table-card.face-up::after {
+  content: "BRAND" !important;
+  position: absolute !important;
+  right: 7px !important;
+  bottom: 7px !important;
+  padding: 3px 5px !important;
+  border-radius: 999px !important;
+  font-size: 7px !important;
+  font-weight: 1000 !important;
+  letter-spacing: 0.08em !important;
+  color: rgba(0,0,0,0.48) !important;
+  background: rgba(0,0,0,0.07) !important;
+}
+
+.facts-list.full-slots .fact-row > span,
+.facts-list.full-slots .visual-slot .slot-text span,
+.mini-table-card-top span {
+  display: block !important;
+  font-size: 9px !important;
+  font-weight: 1000 !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.08em !important;
+  color: rgba(0,0,0,0.62) !important;
+  margin: 0 !important;
+  z-index: 2 !important;
+}
+
+.facts-list.full-slots .closed-slot > span,
+.facts-list.full-slots .visual-slot.closed-slot .slot-text span {
+  color: rgba(255,255,255,0.58) !important;
+}
+
+.facts-list.full-slots .fact-row > strong,
+.facts-list.full-slots .visual-slot .slot-text strong,
+.mini-table-card-value {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  flex: 1 !important;
+  text-align: center !important;
+  font-size: 12px !important;
+  line-height: 1.22 !important;
+  font-weight: 900 !important;
+  color: #171717 !important;
+  word-break: break-word !important;
+  z-index: 2 !important;
+}
+
+.facts-list.full-slots .closed-slot > strong,
+.facts-list.full-slots .visual-slot.closed-slot .slot-text strong {
+  color: transparent !important;
+}
+
+.facts-list.full-slots .visual-slot .slot-icon {
+  position: absolute !important;
+  right: 8px !important;
+  top: 8px !important;
+  width: 24px !important;
+  height: 24px !important;
+  border-radius: 8px !important;
+  display: grid !important;
+  place-items: center !important;
+  font-size: 14px !important;
+  background: rgba(0,0,0,0.08) !important;
+  z-index: 3 !important;
+}
+
+.facts-list.full-slots .visual-slot.closed-slot .slot-icon {
+  opacity: 0 !important;
+}
+
+.facts-list.full-slots .visual-slot .slot-text {
+  display: contents !important;
+}
+
+.card-tone-job.opened-slot,
+.visual-slot.card-tone-job.opened-slot { box-shadow: 0 10px 22px rgba(255,166,77,0.22), inset 0 1px 0 rgba(255,255,255,0.18) !important; }
+
+.card-tone-health.opened-slot,
+.visual-slot.card-tone-health.opened-slot { box-shadow: 0 10px 22px rgba(46,204,113,0.22), inset 0 1px 0 rgba(255,255,255,0.18) !important; }
+
+.card-tone-character.opened-slot,
+.visual-slot.card-tone-character.opened-slot { box-shadow: 0 10px 22px rgba(155,89,182,0.22), inset 0 1px 0 rgba(255,255,255,0.18) !important; }
+
+.card-tone-phobia.opened-slot,
+.visual-slot.card-tone-phobia.opened-slot { box-shadow: 0 10px 22px rgba(231,76,60,0.22), inset 0 1px 0 rgba(255,255,255,0.18) !important; }
+
+.card-tone-hobby.opened-slot,
+.visual-slot.card-tone-hobby.opened-slot { box-shadow: 0 10px 22px rgba(52,152,219,0.22), inset 0 1px 0 rgba(255,255,255,0.18) !important; }
+
+.card-tone-inventory.opened-slot,
+.visual-slot.card-tone-inventory.opened-slot { box-shadow: 0 10px 22px rgba(241,196,15,0.22), inset 0 1px 0 rgba(255,255,255,0.18) !important; }
+
+.card-tone-special.opened-slot,
+.visual-slot.card-tone-special.opened-slot { box-shadow: 0 10px 22px rgba(255,105,180,0.24), inset 0 1px 0 rgba(255,255,255,0.18) !important; }
+
+@keyframes tableCardFlipIn {
+  0% {
+    opacity: 0;
+    transform: perspective(800px) rotateY(76deg) scale(0.92);
+  }
+
+  65% {
+    opacity: 1;
+    transform: perspective(800px) rotateY(-6deg) scale(1.02);
+  }
+
+  100% {
+    opacity: 1;
+    transform: perspective(800px) rotateY(0deg) scale(1);
+  }
+}
+
+.table-card.face-up {
+  animation: tableCardFlipIn 420ms ease both !important;
+}
+
+@media (max-width: 430px) {
+  .facts-list.full-slots {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    gap: 9px !important;
+  }
+
+  .facts-list.full-slots .fact-row,
+  .facts-list.full-slots .visual-slot,
+  .mini-table-card {
+    min-height: 108px !important;
+    border-radius: 14px !important;
+  }
+
+  .facts-list.full-slots .fact-row > strong,
+  .facts-list.full-slots .visual-slot .slot-text strong,
+  .mini-table-card-value {
+    font-size: 11px !important;
+  }
+}
+
+/* === PUBLIC PLAYER TABLE CARDS END === */
