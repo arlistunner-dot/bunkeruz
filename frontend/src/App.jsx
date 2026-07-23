@@ -169,6 +169,7 @@ export default function App() {
   const [chatInput, setChatInput] = useState("");
   const [floatingChatOpen, setFloatingChatOpen] = useState(false);
   const [lastSeenChatCount, setLastSeenChatCount] = useState(0);
+  const [peekedCardKeys, setPeekedCardKeys] = useState({});
 
   const me = useMemo(() => {
     if (!room || !playerId) {
@@ -342,6 +343,12 @@ export default function App() {
     });
   }
 
+  function togglePeekCard(cardKey) {
+    setPeekedCardKeys((current) => ({
+      ...current,
+      [cardKey]: !current[cardKey]
+    }));
+  }
   function revealCard(cardKey) {
     if (!socket || !room || !playerId) {
       return;
@@ -808,14 +815,25 @@ export default function App() {
                 <div className="card-choice-grid real-card-grid">
                   {game?.myCard?.map((card) => {
                     const visual = getCardVisual(card.key);
+                    const isPeeked = Boolean(peekedCardKeys[card.key]);
+                    const isFaceUp = card.revealed || isPeeked;
 
                     return (
                       <div
-                        className={`table-card-wrap ${card.revealed ? "is-revealed" : "is-hidden"}`}
+                        className={`table-card-wrap ${card.revealed ? "is-revealed" : isPeeked ? "is-peeked" : "is-hidden"}`}
                         key={card.key}
                       >
-                        <div className={`table-card ${card.revealed ? "face-up" : "face-down"} card-tone-${visual.tone}`}>
-                          {card.revealed ? (
+                        <div
+                          className={`table-card ${isFaceUp ? "face-up" : "face-down"} card-tone-${visual.tone}`}
+                          onClick={() => {
+                            if (!card.revealed) {
+                              togglePeekCard(card.key);
+                            }
+                          }}
+                          role="button"
+                          tabIndex={0}
+                        >
+                          {isFaceUp ? (
                             <>
                               <div className="table-card-header">
                                 <span className="table-card-type">{card.label}</span>
@@ -827,17 +845,19 @@ export default function App() {
                               </div>
 
                               <div className="table-card-footer">
-                                <span className="table-card-mini">Bunker kartasi</span>
+                                <span className="table-card-mini">
+                                  {card.revealed ? "Hammaga ochilgan" : "Faqat siz ko‘ryapsiz"}
+                                </span>
                                 <span className="table-card-sponsor">AD</span>
                               </div>
                             </>
                           ) : (
                             <div className="table-card-back">
                               <div className="table-card-back-inner">
-                                
-                                <div className="table-card-back-logo">SJ</div><div className="table-card-back-title">SO‘NGGI JOY</div>
+                                <div className="table-card-back-logo">SJ</div>
+                                <div className="table-card-back-title">SO‘NGGI JOY</div>
                                 <div className="table-card-back-mark">🂠</div>
-                                <div className="table-card-back-sub">{card.label}</div>
+                                <div className="table-card-back-sub">{card.label} — bosib ko‘ring</div>
                               </div>
                             </div>
                           )}
@@ -852,9 +872,12 @@ export default function App() {
                             <button
                               type="button"
                               disabled={!card.canReveal}
-                              onClick={() => revealCard(card.key)}
+                              onClick={(event) => {
+                                event.stopPropagation();
+                                revealCard(card.key);
+                              }}
                             >
-                              Kartani ochish
+                              Hammaga ochish
                             </button>
                           )}
                         </div>

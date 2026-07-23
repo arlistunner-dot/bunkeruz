@@ -2864,3 +2864,39 @@ body,
 }
 
 /* === GLOBAL FLOATING CHAT END === */
+
+
+
+/* === PRIVATE CARD PEEK START === */
+
+.table-card {
+  cursor: pointer !important;
+}
+
+.table-card-wrap.is-peeked .table-card.face-up {
+  outline: 2px solid rgba(255, 209, 102, 0.65) !important;
+  outline-offset: 2px !important;
+}
+
+.table-card-wrap.is-peeked .table-card-mini {
+  color: rgba(120, 72, 0, 0.78) !important;
+}
+
+.table-card-wrap.is-hidden .table-card-back-sub {
+  max-width: 90% !important;
+  line-height: 1.25 !important;
+}
+
+.table-card-wrap.is-hidden .table-card:hover {
+  transform: perspective(900px) rotateX(3deg) translateY(-2px) scale(1.01) !important;
+}
+
+.table-card-wrap.is-revealed .table-card {
+  cursor: default !important;
+}
+
+.table-card-action button {
+  cursor: pointer !important;
+}
+
+/* === PRIVATE CARD PEEK END === */
