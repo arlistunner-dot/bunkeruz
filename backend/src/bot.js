@@ -16,7 +16,7 @@ if (!BOT_TOKEN) {
 export const bot = new Telegraf(BOT_TOKEN);
 
 const rulesText = `
-📜 <b>So‘nggi Joy qoidalari</b>
+📜 <b>Bunker qoidalari</b>
 
 🃏 Har bir o‘yinchiga maxfiy kartalar beriladi:
 • Kasb
@@ -39,7 +39,7 @@ const rulesText = `
 `;
 
 const startText = `
-🕳 <b>So‘nggi Joy</b>
+🕳 <b>Bunker</b>
 
 Apokalipsis boshlandi. Bunkerda joylar cheklangan.
 
@@ -149,7 +149,7 @@ bot.catch((err) => {
 });
 
 export function printBotInfo() {
-  console.log("✅ So‘nggi Joy Telegram bot tayyor.");
+  console.log("✅ Bunker Telegram bot tayyor.");
   console.log(`FRONTEND_URL: ${FRONTEND_URL || "yozilmagan"}`);
   console.log(`Mini App HTTPS: ${isHttpsUrl(FRONTEND_URL) ? "ha" : "yo‘q"}`);
 }

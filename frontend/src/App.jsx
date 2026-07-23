@@ -566,7 +566,7 @@ export default function App() {
                 <div className="badge">
                   {gameFinished ? "O‘yin yakunlandi" : isVoting ? "Ovoz berish" : "Karta ochish"}
                 </div>
-                <h1>So‘nggi Joy</h1>
+                <h1>Bunker</h1>
               </div>
 
               <button type="button" className="small-secondary" onClick={leaveRoom}>
@@ -854,8 +854,8 @@ export default function App() {
                           ) : (
                             <div className="table-card-back">
                               <div className="table-card-back-inner">
-                                <div className="table-card-back-logo">SJ</div>
-                                <div className="table-card-back-title">SO‘NGGI JOY</div>
+                                <div className="table-card-back-logo">B</div>
+                                <div className="table-card-back-title">BUNKER</div>
                                 <div className="table-card-back-mark">🂠</div>
                                 <div className="table-card-back-sub">{card.label} — bosib ko‘ring</div>
                               </div>
@@ -1109,7 +1109,7 @@ export default function App() {
           <div className="lobby-main">
             <div className="badge">Xona kutish rejimi</div>
 
-            <h1>So‘nggi Joy</h1>
+            <h1>Bunker</h1>
 
             <p className="subtitle">
               Xona yaratildi. Endi do‘stlaringizga kodni yuboring. Hozircha test
@@ -1222,7 +1222,7 @@ export default function App() {
       <section className="hero-card">
         <div className="badge">Telegram Mini App o‘yini</div>
 
-        <h1>So‘nggi Joy</h1>
+        <h1>Bunker</h1>
 
         <p className="subtitle">
           Apokalipsisdan keyin bunkerda kim qoladi? Kartalarni oching,

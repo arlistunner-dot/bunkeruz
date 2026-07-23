@@ -40,7 +40,7 @@ function sendBackendStatus(req, res) {
   res.json({
     ok: true,
     status: "healthy",
-    app: "So‘nggi Joy Backend",
+    app: "Bunker Backend",
     version: "0.5.0",
     path: req.path,
     message: "Backend ishlayapti"
@@ -94,7 +94,7 @@ io.on("connection", (socket) => {
   console.log("Yangi socket ulandi:", socket.id);
 
   socket.emit("server:hello", {
-    message: "So‘nggi Joy real-time serveriga ulandingiz",
+    message: "Bunker real-time serveriga ulandingiz",
     socketId: socket.id
   });
 
@@ -308,14 +308,14 @@ app.use((req, res) => {
   res.status(404).json({
     ok: false,
     status: "not_found",
-    app: "So‘nggi Joy Backend",
+    app: "Bunker Backend",
     path: req.path,
     message: "Bunday route topilmadi"
   });
 });
 
 server.listen(PORT, async () => {
-  console.log(`So‘nggi Joy backend ishga tushdi: http://127.0.0.1:${PORT}`);
+  console.log(`Bunker backend ishga tushdi: http://127.0.0.1:${PORT}`);
   printBotInfo();
 
   if (!BACKEND_URL.startsWith("https://")) {
