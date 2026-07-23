@@ -827,12 +827,14 @@ export default function App() {
 
                               <div className="table-card-footer">
                                 <span className="table-card-mini">Bunker kartasi</span>
+                                <span className="table-card-sponsor">AD</span>
                               </div>
                             </>
                           ) : (
                             <div className="table-card-back">
                               <div className="table-card-back-inner">
-                                <div className="table-card-back-title">SO‘NGGI JOY</div>
+                                
+                                <div className="table-card-back-logo">SJ</div><div className="table-card-back-title">SO‘NGGI JOY</div>
                                 <div className="table-card-back-mark">🂠</div>
                                 <div className="table-card-back-sub">{card.label}</div>
                               </div>
