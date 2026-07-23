@@ -167,6 +167,7 @@ export default function App() {
   const [busy, setBusy] = useState(false);
   const [gameTab, setGameTab] = useState("cards");
   const [chatInput, setChatInput] = useState("");
+  const [floatingChatOpen, setFloatingChatOpen] = useState(false);
 
   const me = useMemo(() => {
     if (!room || !playerId) {
@@ -777,13 +778,6 @@ export default function App() {
               >
                 Ovoz
               </button>
-              <button
-                type="button"
-                className={gameTab === "chat" ? "active" : ""}
-                onClick={() => setGameTab("chat")}
-              >
-                Chat
-              </button>
             </div>
 <div className={`game-tab-section ${gameTab === "cards" ? "mobile-active" : ""}`}>
               <div className="my-card-panel">
@@ -943,10 +937,6 @@ export default function App() {
                   </div>
                 </div>
               )}
-            </div>
-
-            <div className={`game-tab-section ${gameTab === "chat" ? "mobile-active" : ""}`}>
-              {renderChatPanel()}
             </div>
             <div className={`game-tab-section players-tab-section ${gameTab === "players" ? "mobile-active" : ""}`}>
               <div className="section-title public-title">
@@ -1191,6 +1181,28 @@ export default function App() {
           shu kod orqali kiring.
         </p>
       </section>
-    </main>
+    
+      {room && (
+        <div className="floating-chat-shell">
+          {floatingChatOpen && (
+            <div className="floating-chat-panel">
+              {renderChatPanel(true)}
+            </div>
+          )}
+
+          <button
+            type="button"
+            className={floatingChatOpen ? "floating-chat-button active" : "floating-chat-button"}
+            onClick={() => setFloatingChatOpen((current) => !current)}
+            aria-label="Chatni ochish"
+          >
+            <span>💬</span>
+            {(room.chat || []).length > 0 && (
+              <em>{Math.min((room.chat || []).length, 99)}</em>
+            )}
+          </button>
+        </div>
+      )}
+</main>
   );
 }
