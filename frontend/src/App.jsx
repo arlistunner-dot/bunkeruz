@@ -1147,18 +1147,6 @@ export default function App() {
           bahslashing, ovoz bering va omon qolishga harakat qiling.
         </p>
 
-        <div className="status-grid">
-          <div className="status-box">
-            <span>API</span>
-            <strong>{apiStatus}</strong>
-          </div>
-
-          <div className="status-box">
-            <span>Socket</span>
-            <strong>{socketStatus}</strong>
-          </div>
-        </div>
-
         <div className="form-grid">
           <label>
             Ismingiz
