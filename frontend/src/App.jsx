@@ -1037,7 +1037,29 @@ export default function App() {
             </div>
           </aside>
         </section>
-      </main>
+      
+      {room && (
+        <div className="global-chat-float-shell">
+          {floatingChatOpen && (
+            <div className="global-chat-float-panel">
+              {renderChatPanel(true)}
+            </div>
+          )}
+
+          <button
+            type="button"
+            className={floatingChatOpen ? "global-chat-float-button active" : "global-chat-float-button"}
+            onClick={() => setFloatingChatOpen((current) => !current)}
+            aria-label="Chatni ochish"
+          >
+            <span>💬</span>
+            {(room.chat || []).length > 0 && (
+              <em>{Math.min((room.chat || []).length, 99)}</em>
+            )}
+          </button>
+        </div>
+      )}
+</main>
     );
   }
 
@@ -1121,7 +1143,29 @@ export default function App() {
             </div>
           </aside>
         </section>
-      </main>
+      
+      {room && (
+        <div className="global-chat-float-shell">
+          {floatingChatOpen && (
+            <div className="global-chat-float-panel">
+              {renderChatPanel(true)}
+            </div>
+          )}
+
+          <button
+            type="button"
+            className={floatingChatOpen ? "global-chat-float-button active" : "global-chat-float-button"}
+            onClick={() => setFloatingChatOpen((current) => !current)}
+            aria-label="Chatni ochish"
+          >
+            <span>💬</span>
+            {(room.chat || []).length > 0 && (
+              <em>{Math.min((room.chat || []).length, 99)}</em>
+            )}
+          </button>
+        </div>
+      )}
+</main>
     );
   }
 
@@ -1193,6 +1237,28 @@ export default function App() {
           <button
             type="button"
             className={floatingChatOpen ? "floating-chat-button active" : "floating-chat-button"}
+            onClick={() => setFloatingChatOpen((current) => !current)}
+            aria-label="Chatni ochish"
+          >
+            <span>💬</span>
+            {(room.chat || []).length > 0 && (
+              <em>{Math.min((room.chat || []).length, 99)}</em>
+            )}
+          </button>
+        </div>
+      )}
+
+      {room && (
+        <div className="global-chat-float-shell">
+          {floatingChatOpen && (
+            <div className="global-chat-float-panel">
+              {renderChatPanel(true)}
+            </div>
+          )}
+
+          <button
+            type="button"
+            className={floatingChatOpen ? "global-chat-float-button active" : "global-chat-float-button"}
             onClick={() => setFloatingChatOpen((current) => !current)}
             aria-label="Chatni ochish"
           >

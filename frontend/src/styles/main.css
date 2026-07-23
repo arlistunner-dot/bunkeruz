@@ -2743,3 +2743,124 @@ body,
 }
 
 /* === FLOATING CHAT FIX END === */
+
+
+
+/* === GLOBAL FLOATING CHAT START === */
+
+.global-chat-float-shell {
+  position: fixed !important;
+  right: 14px !important;
+  bottom: calc(96px + env(safe-area-inset-bottom)) !important;
+  z-index: 2147483647 !important;
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: flex-end !important;
+  gap: 12px !important;
+  pointer-events: none !important;
+}
+
+.global-chat-float-button,
+.global-chat-float-panel {
+  pointer-events: auto !important;
+}
+
+.global-chat-float-button {
+  position: relative !important;
+  width: 56px !important;
+  height: 56px !important;
+  border-radius: 999px !important;
+  display: grid !important;
+  place-items: center !important;
+  border: 2px solid rgba(255,255,255,0.24) !important;
+  background: linear-gradient(135deg, #ff7a3d, #ff3d5a) !important;
+  color: #fff !important;
+  box-shadow:
+    0 18px 44px rgba(0,0,0,0.55),
+    0 8px 20px rgba(255,61,90,0.32),
+    inset 0 1px 0 rgba(255,255,255,0.38) !important;
+  cursor: pointer !important;
+}
+
+.global-chat-float-button span {
+  font-size: 25px !important;
+  line-height: 1 !important;
+}
+
+.global-chat-float-button em {
+  position: absolute !important;
+  top: -6px !important;
+  right: -5px !important;
+  min-width: 22px !important;
+  height: 22px !important;
+  padding: 0 6px !important;
+  display: grid !important;
+  place-items: center !important;
+  border-radius: 999px !important;
+  font-size: 11px !important;
+  font-style: normal !important;
+  font-weight: 1000 !important;
+  color: #1b0b12 !important;
+  background: #fff3d6 !important;
+  border: 2px solid rgba(20,10,14,0.92) !important;
+}
+
+.global-chat-float-button.active {
+  transform: scale(1.04) !important;
+  filter: brightness(1.08) !important;
+}
+
+.global-chat-float-panel {
+  width: min(360px, calc(100vw - 24px)) !important;
+  max-height: min(560px, calc(100vh - 155px)) !important;
+  overflow: hidden !important;
+  border-radius: 24px !important;
+  border: 1px solid rgba(255,255,255,0.16) !important;
+  background:
+    radial-gradient(circle at 10% 0%, rgba(255,122,61,0.14), transparent 36%),
+    rgba(16, 18, 27, 0.98) !important;
+  box-shadow:
+    0 24px 70px rgba(0,0,0,0.58),
+    inset 0 1px 0 rgba(255,255,255,0.08) !important;
+  backdrop-filter: blur(14px) !important;
+}
+
+.global-chat-float-panel .chat-panel {
+  border: none !important;
+  background: transparent !important;
+  box-shadow: none !important;
+  margin: 0 !important;
+}
+
+.global-chat-float-panel .chat-messages {
+  max-height: min(390px, calc(100vh - 315px)) !important;
+}
+
+.mobile-tabbar {
+  display: grid !important;
+  grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+  gap: 8px !important;
+}
+
+.mobile-tabbar button {
+  width: 100% !important;
+}
+
+@media (max-width: 430px) {
+  .global-chat-float-shell {
+    right: 12px !important;
+    bottom: calc(92px + env(safe-area-inset-bottom)) !important;
+  }
+
+  .global-chat-float-button {
+    width: 54px !important;
+    height: 54px !important;
+  }
+
+  .global-chat-float-panel {
+    width: calc(100vw - 24px) !important;
+    max-height: calc(100vh - 155px) !important;
+  }
+}
+
+/* === GLOBAL FLOATING CHAT END === */
