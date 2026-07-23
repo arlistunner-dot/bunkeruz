@@ -168,6 +168,7 @@ export default function App() {
   const [gameTab, setGameTab] = useState("cards");
   const [chatInput, setChatInput] = useState("");
   const [floatingChatOpen, setFloatingChatOpen] = useState(false);
+  const [lastSeenChatCount, setLastSeenChatCount] = useState(0);
 
   const me = useMemo(() => {
     if (!room || !playerId) {
@@ -237,6 +238,12 @@ export default function App() {
       setGameTab((current) => current === "vote" ? "cards" : current);
     }
   }, [room?.game?.phase]);
+
+  useEffect(() => {
+    if (floatingChatOpen && room?.chat) {
+      setLastSeenChatCount(room.chat.length);
+    }
+  }, [floatingChatOpen, room?.chat?.length]);
 
   function getCleanName() {
     const clean = name.trim();
@@ -1049,12 +1056,21 @@ export default function App() {
           <button
             type="button"
             className={floatingChatOpen ? "global-chat-float-button active" : "global-chat-float-button"}
-            onClick={() => setFloatingChatOpen((current) => !current)}
+            onClick={() => {
+              const nextOpen = !floatingChatOpen;
+              setFloatingChatOpen(nextOpen);
+
+              if (nextOpen) {
+                setLastSeenChatCount((room.chat || []).length);
+              }
+            }}
             aria-label="Chatni ochish"
           >
             <span>💬</span>
-            {(room.chat || []).length > 0 && (
-              <em>{Math.min((room.chat || []).length, 99)}</em>
+            {Math.max(0, (room.chat || []).length - lastSeenChatCount) > 0 && (
+              <em>
+                {Math.min(Math.max(0, (room.chat || []).length - lastSeenChatCount), 99)}
+              </em>
             )}
           </button>
         </div>
@@ -1155,12 +1171,21 @@ export default function App() {
           <button
             type="button"
             className={floatingChatOpen ? "global-chat-float-button active" : "global-chat-float-button"}
-            onClick={() => setFloatingChatOpen((current) => !current)}
+            onClick={() => {
+              const nextOpen = !floatingChatOpen;
+              setFloatingChatOpen(nextOpen);
+
+              if (nextOpen) {
+                setLastSeenChatCount((room.chat || []).length);
+              }
+            }}
             aria-label="Chatni ochish"
           >
             <span>💬</span>
-            {(room.chat || []).length > 0 && (
-              <em>{Math.min((room.chat || []).length, 99)}</em>
+            {Math.max(0, (room.chat || []).length - lastSeenChatCount) > 0 && (
+              <em>
+                {Math.min(Math.max(0, (room.chat || []).length - lastSeenChatCount), 99)}
+              </em>
             )}
           </button>
         </div>
@@ -1237,12 +1262,21 @@ export default function App() {
           <button
             type="button"
             className={floatingChatOpen ? "floating-chat-button active" : "floating-chat-button"}
-            onClick={() => setFloatingChatOpen((current) => !current)}
+            onClick={() => {
+              const nextOpen = !floatingChatOpen;
+              setFloatingChatOpen(nextOpen);
+
+              if (nextOpen) {
+                setLastSeenChatCount((room.chat || []).length);
+              }
+            }}
             aria-label="Chatni ochish"
           >
             <span>💬</span>
-            {(room.chat || []).length > 0 && (
-              <em>{Math.min((room.chat || []).length, 99)}</em>
+            {Math.max(0, (room.chat || []).length - lastSeenChatCount) > 0 && (
+              <em>
+                {Math.min(Math.max(0, (room.chat || []).length - lastSeenChatCount), 99)}
+              </em>
             )}
           </button>
         </div>
@@ -1259,12 +1293,21 @@ export default function App() {
           <button
             type="button"
             className={floatingChatOpen ? "global-chat-float-button active" : "global-chat-float-button"}
-            onClick={() => setFloatingChatOpen((current) => !current)}
+            onClick={() => {
+              const nextOpen = !floatingChatOpen;
+              setFloatingChatOpen(nextOpen);
+
+              if (nextOpen) {
+                setLastSeenChatCount((room.chat || []).length);
+              }
+            }}
             aria-label="Chatni ochish"
           >
             <span>💬</span>
-            {(room.chat || []).length > 0 && (
-              <em>{Math.min((room.chat || []).length, 99)}</em>
+            {Math.max(0, (room.chat || []).length - lastSeenChatCount) > 0 && (
+              <em>
+                {Math.min(Math.max(0, (room.chat || []).length - lastSeenChatCount), 99)}
+              </em>
             )}
           </button>
         </div>
