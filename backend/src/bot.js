@@ -1,149 +1,175 @@
-import dotenv from "dotenv";
+import "dotenv/config";
 import { Telegraf, Markup } from "telegraf";
-
-dotenv.config();
 
 const BOT_TOKEN = process.env.BOT_TOKEN;
 const FRONTEND_URL = process.env.FRONTEND_URL || "";
 const VOICE_CHAT_URL = process.env.VOICE_CHAT_URL || "";
 
-const rulesText = `
-🎮 So‘nggi Joy — bunker uslubidagi strategik kartali o‘yin.
-
-🧩 Maqsad:
-Apokalipsisdan keyin bunkerga kim kirishini hal qilish.
-
-👥 O‘yin:
-1. Xona yaratiladi.
-2. Do‘stlar xona kodi orqali qo‘shiladi.
-3. Har bir o‘yinchiga maxfiy kartalar beriladi.
-4. Har kim o‘z kartalarini ko‘radi, boshqalar esa ko‘rmaydi.
-5. Har raundda har bir o‘yinchi istagan bitta kartasini ochadi.
-6. O‘yinchilar ovozli chatda bahslashadi.
-7. Har 2 raunddan keyin ovoz berish bo‘ladi.
-8. Eng ko‘p ovoz olgan o‘yinchi bunkerdan chiqariladi.
-9. Durang bo‘lsa, faqat durangdagi o‘yinchilar orasidan qayta ovoz beriladi.
-10. Oxirida bunkerga kirganlar g‘olib bo‘ladi.
-
-🎭 Strategiya:
-Yaxshi kartalarni vaqtida oching, yomon kartalarni yashiring, boshqalarni ishontiring.
-`;
-
 function isHttpsUrl(url) {
-  return typeof url === "string" && url.trim().startsWith("https://");
+  return typeof url === "string" && url.startsWith("https://");
 }
 
-function mainMenu() {
-  const buttons = [];
-
-  if (isHttpsUrl(FRONTEND_URL)) {
-    buttons.push([
-      Markup.button.webApp("🎮 O‘yinni ochish", FRONTEND_URL)
-    ]);
-  } else {
-    buttons.push([
-      Markup.button.callback("🎮 O‘yinni ochish", "miniapp_not_ready")
-    ]);
-  }
-
-  buttons.push([
-    Markup.button.callback("📜 Qoidalar", "rules")
-  ]);
-
-  if (isHttpsUrl(VOICE_CHAT_URL) || VOICE_CHAT_URL.startsWith("https://t.me/")) {
-    buttons.push([
-      Markup.button.url("🎙 Ovozli chat guruhi", VOICE_CHAT_URL)
-    ]);
-  }
-
-  return Markup.inlineKeyboard(buttons);
-}
-
-if (!BOT_TOKEN || BOT_TOKEN === "PASTE_YOUR_BOT_TOKEN_HERE") {
-  console.log("");
-  console.log("⚠️ BOT_TOKEN topilmadi.");
-  console.log("backend\\.env faylini oching va BOT_TOKEN= joyiga BotFather tokenini yozing.");
-  console.log("");
-  process.exit(0);
+if (!BOT_TOKEN) {
+  throw new Error("BOT_TOKEN .env ichida topilmadi");
 }
 
 export const bot = new Telegraf(BOT_TOKEN);
 
-bot.start(async (ctx) => {
-  const firstName = ctx.from?.first_name || "o‘yinchi";
+const rulesText = `
+📜 <b>So‘nggi Joy qoidalari</b>
 
-  await ctx.reply(
-    `👋 Salom, ${firstName}!\n\n` +
-    `Bu — So‘nggi Joy.\n\n` +
-    `Bunkerga kim kiradi, kim tashqarida qoladi — buni sizlar hal qilasiz.\n\n` +
-    `O‘yinni boshlash uchun tugmani bosing:`,
-    mainMenu()
-  );
-});
+🃏 Har bir o‘yinchiga maxfiy kartalar beriladi:
+• Kasb
+• Yosh
+• Sog‘liq
+• Xarakter
+• Fobiya
+• Hobbi
+• Inventar
+• Maxsus karta
+
+👀 Siz o‘z kartalaringizni ko‘ra olasiz.
+🔒 Boshqalar sizning kartalaringizni ko‘rmaydi.
+📢 “Hammaga ochish” bosilganda karta barcha o‘yinchilarga ko‘rinadi.
+
+💬 Bahslashing, o‘zingizni himoya qiling va bunkerga kirishga harakat qiling.
+
+🗳 Har 2 ta karta ochish raundidan keyin ovoz berish boshlanadi.
+🏆 Oxirida bunkerda qolganlar g‘olib bo‘ladi.
+`;
+
+const startText = `
+🕳 <b>So‘nggi Joy</b>
+
+Apokalipsis boshlandi. Bunkerda joylar cheklangan.
+
+Siz va do‘stlaringizga turli kartalar beriladi. Kim bunkerga kirishga loyiq, kim tashqarida qoladi — buni sizlarning bahsingiz, strategiyangiz va ovozingiz hal qiladi.
+
+🎮 <b>O‘yin qanday o‘tadi?</b>
+• Xona yarating yoki kod orqali kiring
+• Kartalaringizni ko‘rib chiqing
+• Kerakli kartani hammaga oching
+• Chatda o‘zingizni himoya qiling
+• Ovoz berib, kim qolishini hal qiling
+
+🔥 <b>Eng muhimi:</b>
+Bu o‘yin hazil, bahs, strategiya va do‘stlar bilan kulgi uchun.
+`;
+
+function mainMenu() {
+  const rows = [];
+
+  if (isHttpsUrl(FRONTEND_URL)) {
+    rows.push([
+      Markup.button.webApp("🎮 O‘yinni boshlash", FRONTEND_URL)
+    ]);
+  } else {
+    rows.push([
+      Markup.button.callback("🎮 Mini App tayyor emas", "miniapp_not_ready")
+    ]);
+  }
+
+  rows.push([
+    Markup.button.callback("📜 Qoidalar", "rules")
+  ]);
+
+  if (isHttpsUrl(VOICE_CHAT_URL)) {
+    rows.push([
+      Markup.button.url("🎙 Voice chat", VOICE_CHAT_URL)
+    ]);
+  }
+
+  return Markup.inlineKeyboard(rows);
+}
+
+async function sendStart(ctx) {
+  await ctx.reply(startText, {
+    parse_mode: "HTML",
+    ...mainMenu()
+  });
+}
+
+bot.start(sendStart);
 
 bot.command("play", async (ctx) => {
-  await ctx.reply("🎮 O‘yinni ochish:", mainMenu());
+  await sendStart(ctx);
 });
 
 bot.command("rules", async (ctx) => {
-  await ctx.reply(rulesText, mainMenu());
+  await ctx.reply(rulesText, {
+    parse_mode: "HTML",
+    ...mainMenu()
+  });
+});
+
+bot.command("help", async (ctx) => {
+  await ctx.reply(
+    `🆘 <b>Yordam</b>
+
+🎮 O‘yinni boshlash uchun pastdagi tugmani bosing.
+👥 Do‘stlaringizni xonaga kod orqali chaqiring.
+🃏 Kartani ustiga bossangiz — faqat o‘zingiz ko‘rasiz.
+📢 “Hammaga ochish” bossangiz — karta hammaga ko‘rinadi.
+
+Savol tug‘ilsa, o‘yin ichidagi chatdan foydalaning.`,
+    {
+      parse_mode: "HTML",
+      ...mainMenu()
+    }
+  );
 });
 
 bot.action("rules", async (ctx) => {
   await ctx.answerCbQuery();
-  await ctx.reply(rulesText, mainMenu());
+  await ctx.reply(rulesText, {
+    parse_mode: "HTML",
+    ...mainMenu()
+  });
 });
 
 bot.action("miniapp_not_ready", async (ctx) => {
-  await ctx.answerCbQuery();
-
+  await ctx.answerCbQuery("Mini App URL hali HTTPS qilib ulanmagan.");
   await ctx.reply(
-    "⚠️ Mini App hali Telegram ichida ochilmaydi.\n\n" +
-    "Sabab: Telegram Web App faqat HTTPS link qabul qiladi.\n\n" +
-    `Hozirgi link: ${FRONTEND_URL || "FRONTEND_URL yozilmagan"}\n\n` +
-    "Lokal test uchun brauzerda oching:\n" +
-    "http://127.0.0.1:5173\n\n" +
-    "Keyingi qadamda HTTPS tunnel yoki deploy qilib, bot tugmasini haqiqiy Mini Appga ulaymiz."
+    `⚠️ <b>Mini App hozircha ochilmayapti</b>
+
+FRONTEND_URL .env ichida HTTPS link bo‘lishi kerak.
+
+Hozirgi FRONTEND_URL:
+<code>${FRONTEND_URL || "yozilmagan"}</code>`,
+    { parse_mode: "HTML" }
   );
 });
 
-bot.hears(["o‘ynash", "O‘ynash", "oyin", "Oyin", "play", "Play"], async (ctx) => {
-  await ctx.reply("🎮 O‘yinni ochish:", mainMenu());
+bot.hears(["🎮 O‘yinni boshlash", "O‘yinni boshlash", "play", "Play", "start"], async (ctx) => {
+  await sendStart(ctx);
 });
 
-bot.catch((error) => {
-  console.error("Bot xatosi:", error);
+bot.catch((err) => {
+  console.error("Telegram bot xatosi:", err);
 });
 
 export function printBotInfo() {
   console.log("✅ So‘nggi Joy Telegram bot tayyor.");
-  console.log("FRONTEND_URL:", FRONTEND_URL);
-  console.log("Mini App HTTPS:", isHttpsUrl(FRONTEND_URL) ? "ha" : "yo‘q");
+  console.log(`FRONTEND_URL: ${FRONTEND_URL || "yozilmagan"}`);
+  console.log(`Mini App HTTPS: ${isHttpsUrl(FRONTEND_URL) ? "ha" : "yo‘q"}`);
 }
 
 export async function startPollingBot() {
-  await bot.launch({
-    dropPendingUpdates: true
-  });
+  printBotInfo();
+  await bot.launch();
+  console.log("🤖 Bot polling rejimida ishga tushdi.");
 
-  console.log("✅ So‘nggi Joy Telegram bot polling rejimida ishga tushdi.");
-  console.log("FRONTEND_URL:", FRONTEND_URL);
-  console.log("Mini App HTTPS:", isHttpsUrl(FRONTEND_URL) ? "ha" : "yo‘q");
-
-  process.once("SIGINT", () => {
-    bot.stop("SIGINT");
-  });
-
-  process.once("SIGTERM", () => {
-    bot.stop("SIGTERM");
-  });
+  process.once("SIGINT", () => bot.stop("SIGINT"));
+  process.once("SIGTERM", () => bot.stop("SIGTERM"));
 }
 
-const isDirectRun = process.argv[1] && process.argv[1].replaceAll("\\", "/").endsWith("/bot.js");
+const isDirectRun =
+  process.argv[1] &&
+  process.argv[1].replaceAll("\\", "/").endsWith("/bot.js");
 
 if (isDirectRun) {
-  startPollingBot().catch((error) => {
-    console.error("Bot polling xatosi:", error);
+  startPollingBot().catch((err) => {
+    console.error("Botni ishga tushirishda xato:", err);
     process.exit(1);
   });
 }
